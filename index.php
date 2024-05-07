@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,80 +10,97 @@
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            background-image: url('car-wash-login.jpg'); 
-            background-size: cover;
-            background-position: center;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            position: relative;
         }
+        
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('car-wash-login.jpg'); 
+            background-size: cover;
+            background-position: center;
+            filter: blur(4px);
+            z-index: 0;
+        }
+
         .login-container {
-            background-color: rgba(255, 255, 255, 0.8); 
+            position: relative;
+            z-index: 1;
+            background-color: rgba(255, 255, 255, 0.85);
             padding: 40px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            max-width: 500px;
-            width: 100%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
             text-align: center;
         }
+
         .login-container h2 {
             margin-bottom: 20px;
+            color: #333;
         }
+
         .login-container input[type="text"],
         .login-container input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
+            width: 90%;
+            padding: 12px;
+            margin: 12px 0;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 8px;
         }
+
         .login-container input[type="submit"] {
-            width: 100%;
-            padding: 10px;
-            margin-top: 20px;
-            background-color: #007bff; 
+            width: 90%;
+            padding: 12px;
+            background-color: #007bff;
             color: #fff;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
+
         .login-container input[type="submit"]:hover {
-            background-color: #0056b3; 
+            background-color: #0056b3;
         }
-        .forgot-password,
+
         .register {
-            margin-top: 10px;
+            margin-top: 20px;
             display: block;
-            text-align: right;
             color: #007bff;
+            text-decoration: none;
+            font-size: 14px;
         }
-        .remember-me {
-            margin-top: 10px;
-            display: inline-block;
-            text-align: left;
-        }
-        .remember-me label {
-            margin-left: 5px;
-        }
-        .uniten-logo {
+
+        .cwms-logo {
             margin-bottom: 20px;
         }
     </style>
 </head>
+
 <body>
     <div class="login-container">
-        <div class="SSEMS-logo">
-      <img src="ssems.jpg" alt="UNITEN Logo" width="300">
+        <div class="cwms-logo">
+            <img src="#" alt="CWMS Logo" width="200">
         </div>
         <h2>Login</h2>
         <form action="getIn.php" method="post">
-            <input type="text" name="email" placeholder="Email" required>
+            <input type="text" name="username" placeholder="Username" required>
             <br>
             <input type="password" name="pass" placeholder="Password" required>
             <br>
             <input type="submit" value="Login">
         </form>
+        <a class="register" href="register.html">Haven't Registered?</a>
     </div>
 </body>
+
 </html>

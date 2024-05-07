@@ -55,7 +55,7 @@
                         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
                         $jumlahPelajar = $row['jumlah'] ?? 0;
                       
-                        $sql3="SELECT count(*) as jumlah FROM user WHERE role='Staff';";
+                        $sql3="SELECT count(*) as jumlah FROM user WHERE role='Customer';";
                         $result3 = mysqli_query($conn, $sql3);
                         $row3 = mysqli_fetch_array($result3, MYSQLI_ASSOC);
                         $jumlahFileAvailable = $row3['jumlah'] ?? 0;

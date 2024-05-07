@@ -4,10 +4,10 @@
 <head>
 
     <meta charset="utf-8" />
-    <title>SPPA UPNM</title>
+    <title>Registration</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-    <meta content="Themesbrand" name="author" />
+    <!-- <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Themesbrand" name="author" /> -->
     <!-- App favicon -->
     <link rel="shortcut icon" href="assets/images/favicon.ico">
 
@@ -46,10 +46,10 @@
                     <div class="col-lg-12">
                         <div class="text-center mt-sm-5 mb-4 text-white-50" >
                             <div >
-                                <a href="index.html" class="d-inline-block auth-logo">
-                                    <img src="./logo.png" alt="" height="100">
+                                <a href="index.php" class="d-inline-block auth-logo">
+                                    <img src="#" alt="" height="100">
                                 </a>
-                                <h4 style="font-weight: bolder; color:black;">SISTEM PERINGATAN PINJAMAN ASET PENSYARAH KEPADA PELAJAR (SPPA UPNM)</h4>
+                                <h4 style="font-weight: bolder; color:black;">WELCOME TO CAR WASH MANAGEMENT SYSTEM</h4>
                             </div>
                         </div>
                     </div>
@@ -62,34 +62,38 @@
 
                             <div class="card-body p-4">
                                 <div class="text-center mt-2">
-                                    <h5 class="text-primary">Daftar !</h5>
-                                    <p class="text-muted">SPPA UPNM</p>
+                                    <h5 class="text-primary">Register As a Member</h5>
+                                    <p class="text-muted">Interesting Car Wash Packages Awaiting For You !</p>
                                 </div>
                                 <div class="p-2 mt-4">
                                     <form action="regs.php" method="post">
 
                                         <div class="mb-3">
-                                            <label for="username" class="form-label">Nama</label>
-                                            <input type="text" class="form-control" name='nama' placeholder="Masukkan Nama Penuh" required>
+                                            <label for="fullname" class="form-label">Full Name</label>
+                                            <input type="text" class="form-control" name='fullname' placeholder="Enter Full Name" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="username" class="form-label">Email</label>
-                                            <input type="email" class="form-control" name='email' placeholder="Masukkan Email" required>
+                                            <label for="username" class="form-label">Username</label>
+                                            <input type="username" class="form-control" name='username' placeholder="Enter Username" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="username" class="form-label">No. Matrik</label>
-                                            <input type="text" class="form-control" name='matric' placeholder="Masukkan No. Matrik" required>
+                                            <label for="email" class="form-label">Email</label>
+                                            <input type="email" class="form-control" name='email' placeholder="Enter Email" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="password-input">Kata Laluan</label>
+                                            <label for="phone" class="form-label">Phone</label>
+                                            <input type="number" class="form-control" name='phone' placeholder="Enter Phone Number" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="password-input">Password</label>
                                             <div class="position-relative auth-pass-inputgroup mb-3">
-                                                <input type="password" class="form-control pe-5 password-input" name='pass' placeholder="Masukkan Kata Laluan" id="password-input" required>
+                                                <input type="password" class="form-control pe-5 password-input" name='pass' placeholder="Enter Password" id="password-input" required>
                                                 <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted shadow-none password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
                                             </div>
                                         </div>
                                         
                                         <div class="mt-4">
-                                            <button class="btn btn-success w-100" type="submit">Daftar</button>
+                                            <button class="btn btn-success w-100" type="submit">Register</button>
                                         </div>
 
                                     </form>
@@ -106,21 +110,6 @@
         </div>
         <!-- end auth page content -->
 
-        <!-- footer -->
-        <footer class="footer">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="text-center">
-                            <p class="mb-0 text-muted">&copy;
-                                <script>document.write(new Date().getFullYear())</script> Dziya-Tech.<i class="mdi mdi-heart text-danger"></i> 
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer>
-        <!-- end Footer -->
     </div>
     <!-- end auth-page-wrapper -->
 
