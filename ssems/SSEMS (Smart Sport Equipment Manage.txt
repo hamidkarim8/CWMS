@@ -1,0 +1,40 @@
+SSEMS (Smart Sport Equipment Management System) (RM850)
+
+1. Bola Sepak
+2. Kayu Hoki
+3. Khemah
+4. Kon
+5. Tali
+
+
+Student tap untuk paparkan maklumat equipment
+auto borrow date
+tap sekali lagi bila dah return
+
+boleh pinjam banyak dalam satu masa
+
+return secara manual search no matrik pelajar,
+return kena masukkan juga.
+
+tap untuk masukkan maklumat pelajar bila borrow sahaja.
+
+email (Hantar kat email) bila dah lebih masa pinjam, 
+jadi merah bila dah lebih dari tarikh return.
+
+quantiti item akan berkurang bila pinjam. dan akan return tambah balik.
+Print Summary PDF, Overdue return. Invoice
+Laporan pinjam by student
+Laporan Keseluruhan equipment.
+
+Admin
+	1. Manage Staff (Daftar Staff)
+	2. Daftar Maklumat Equipment
+	3. Daftar Pelajar
+	4. Check History 
+	5. Dll
+	6. Daftar Staff
+
+Staff
+	1. API Link (untuk letak dalam rfid)
+	2. 
+
