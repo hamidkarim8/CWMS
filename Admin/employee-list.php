@@ -40,7 +40,7 @@
                     <div class="card-header">
                         <div class="card">
                             <div class="card-body">
-                                <button type="button" class="btn btn-success btn-animation waves-effect waves-light" data-text="Add Employee" data-bs-toggle="modal" data-bs-target="#myModal"><span>Add Package</span></button>
+                                <button type="button" class="btn btn-success btn-animation waves-effect waves-light" data-text="Add Employee" data-bs-toggle="modal" data-bs-target="#myModal"><span>Add Employee</span></button>
                                 <br>
                                 <br>
                                 <div class="table-responsive">

@@ -31,7 +31,7 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                <h4 class="mb-sm-0">Student List</h4>
+                                <h4 class="mb-sm-0">Branch List</h4>
                             </div>
                         </div>
                     </div>
@@ -40,92 +40,82 @@
                     <div class="card-header">
                         <div class="card">
                             <div class="card-body">
-                                <button type="button" class="btn btn-success btn-animation waves-effect waves-light" data-text="Add Student" data-bs-toggle="modal" data-bs-target="#myModal"><span>Add Student</span></button>
+                                <button type="button" class="btn btn-success btn-animation waves-effect waves-light" data-text="Add Package" data-bs-toggle="modal" data-bs-target="#myModal"><span>Add Package</span></button>
                                 <br>
                                 <br>
-                                <table class="table table-primary table-striped align-middle table-nowrap mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Id</th>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Matriculation Number</th>
-                                            <th scope="col" class="text-center">#</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                        include('../dbConnect.php');
-                                        $query = "SELECT user.id userId, user.password, user.email, profile.noMatrik,profile.nama
-                                        FROM user
-                                        JOIN profile ON user.id=profile.user_id 
-                                        WHERE user.role='Student'";
-                                        $result = $conn->query($query);
-                                        $modal = 1;
-                                        if ($result->num_rows > 0) {
-                                            while ($row = $result->fetch_assoc()) {
-                                                $nama = $row['nama'];
-                                                $noMatrik = $row['noMatrik'];
-                                                $pass = $row['password'];
-                                            
-                                                $email = $row['email'];
-                                                $userId = $row['userId'];
-
-                                               
-
-                                                echo "
+                                <div class="table-responsive">
+                                    <table class="table table-primary table-striped align-middle table-nowrap mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">No</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Location</th>
+                                                <th scope="col">Phone Number</th>
+                                                <th scope="col" class="text-center">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            include('../dbConnect.php');
+                                            $query = "SELECT * FROM branch;";
+                                            $result = $conn->query($query);
+                                            $modal = 1;
+                                            if ($result->num_rows > 0) {
+                                                while ($row = $result->fetch_assoc()) {
+                                                    $name = $row['name'];
+                                                    $id = $row['id'];
+                                                    $location = isset($row['location']) ? $row['location'] : 'No location';
+                                                    $phone = $row['phone'];
+                                                    echo "
                                                     <tr>
                                                     <th scope='row'>$modal</th>
-                                                    <td>$nama</td>
-                                                    <td>$noMatrik</td>
+                                                    <td>$name</td>
+                                                    <td>$location</td>
+                                                    <td>$phone</td>
                                                     <td >
                                                         <center>
                                                             <button type='button' class='btn btn-primary btn-animation waves-effect waves-light data-text='Update' data-bs-toggle='modal' data-bs-target='#view2$modal'>
                                                                 Update
                                                             </button>
-                                                            <a href='./Api/removeStudent.php?userId=$userId' class='btn btn-danger btn-animation waves-effect waves-light data-text='Buang'>
-                                                                Remove
+                                                            <a href='./Api/delete-branch.php?id=$id' class='btn btn-danger btn-animation waves-effect waves-light data-text='Buang'>
+                                                                Delete
                                                             </a>
                                                         </center>
                                                     </td>
                                                 </tr>
                                                     ";
 
-                                                echo "
+                                                    echo "
                                                     <div id='view2$modal' class='modal fade' tabindex='-1' aria-labelledby='myModalLabel' aria-hidden='true' style='display: none;'>
                                                         <div class='modal-dialog'>
                                                             <div class='modal-content'>
                                                                 <div class='modal-header'>
-                                                                    <h5 class='modal-title' id='myModalLabel'>Update Student Information</h5>
+                                                                    <h5 class='modal-title' id='myModalLabel'>Update Branch Information</h5>
                                                                     <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'> </button>
                                                                 </div>
-                                                                <form method='post' action='Api/updateStudent.php'>
+                                                                <form method='post' action='Api/update-branch.php'>
                                                                     <div class='modal-body'>
-                                                                       
-                                                
-                                                                        <div class='col-md-12'>
-                                                                            <label for='inputEmail4' class='form-label'>Name</label>
-                                                                            <input type='text' class='form-control' name='nama' value='$nama' required>
+                                                                        <div class='col-md-12 mt-4'>
+                                                                            <label for='inputEmail4' class='form-label'>Branch ID</label>
+                                                                            <input type='text' class='form-control' value='$id' disabled>
                                                                         </div>
-                                                                        <div class='col-md-12'>
-                                                                            <label for='inputEmail4' class='form-label'>Email</label>
-                                                                            <input type='text' class='form-control' name='email' value='$email' disabled>
+                                                                        <div class='col-md-12 mt-4'>
+                                                                            <label for='inputEmail4' class='form-label'>Name </label>
+                                                                            <input type='text' class='form-control' name='name' value='$name' required>
                                                                         </div>
-                                                                    
-                                                
-                                                
-                                                                        <div class='col-md-12'>
-                                                                            <label for='inputEmail4' class='form-label'>Matriculation Number</label>
-                                                                            <input type='text' class='form-control' name='matrik' value='$noMatrik' required>
+                                                                        <div class='col-md-12 mt-4'>
+                                                                            <label for='inputEmail4' class='form-label'>Location (comma as separator)</label>
+                                                                            <input type='text' class='form-control' name='location' value='$location' required>
                                                                         </div>
-                                                                       
-                                                                        <div class='col-md-12'>
-                                                                            <label for='inputEmail4' class='form-label'>Password</label>
-                                                                            <input type='password' class='form-control' name='pass' value='$pass' required>
+                                                                        <div class='col-md-12 mt-4'>
+                                                                            <label for='inputEmail4' class='form-label'>Phone Number</label>
+                                                                            <input type='number' class='form-control' name='phone' value='$phone' required>
                                                                         </div>
-                                                                        <input type='hidden' value='$userId' name='userId' />
+                                                                        
+                                                                        <input type='hidden' value='$id' name='id' />
                                                                     </div>
                                                                     <div class='modal-footer'>
-                                                                        <button class='btn btn-primary ' type='submit'>Update</button>
+                                                                        <button class='btn btn-primary' type='submit'>Update</button>
                                                                     </div>
                                                                 </form>
                                                             </div>
@@ -134,18 +124,19 @@
                                                 ";
 
 
-                                                $modal++;
-                                            }
-                                        } else {
-                                            echo "
+                                                    $modal++;
+                                                }
+                                            } else {
+                                                echo "
                                                 <tr>
-                                                <td colspan='9' align='center'>No Student Register</td>
+                                                <td colspan='9' align='center' style='color:red;' >No Branch Available</td>
                                                 </tr>";
-                                        }
-                                        ?>
-                                    </tbody>
-                                </table>
+                                            }
+                                            ?>
+                                        </tbody>
+                                    </table>
 
+                                </div>
                             </div>
                         </div> <!-- end col -->
                     </div>
@@ -162,33 +153,34 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title" id="myModalLabel">Add Student</h3>
+                    <h3 class="modal-title" id="myModalLabel">Add Branch</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
                 </div>
-                <form method='post' action='Api/addStudent.php'>
+                <form method='post' action='Api/add-branch.php'>
                     <div class='modal-body'>
                         <h5 class='fs-15'>
-                            <span style='color:red;'>*</span>Fill All Information<br>
-                            <span style='color:red;'>*</span>Password Will Be Same With Matriculation Number
+                            <span style='color:red;'>*</span> Fill All Information<br>
+
                         </h5>
 
-                        <div class='col-md-12'>
-                            <label for='inputEmail4' class='form-label'>Name</label>
-                            <input type='text' class='form-control' name='nama' required>
+                        <div class='col-md-12 mt-4'>
+                            <label for='inputEmail4' class='form-label'>Name </label>
+                            <input type='text' class='form-control' name='name' required>
                         </div>
-                        <div class='col-md-12'>
-                            <label for='inputEmail4' class='form-label'>Email</label>
-                            <input type='text' class='form-control' name='email' required>
+
+                        <div class='col-md-12 mt-4'>
+                            <label for='inputDescription' class='form-label'>Location (comma as separator)</label>
+                            <input type='text' class='form-control' name='location' placeholder='State, Country' required>
                         </div>
-                      
-                        <div class='col-md-12'>
-                            <label for='inputEmail4' class='form-label'>Matriculation Number</label>
-                            <input type='text' class='form-control' name='matrik' required>
+
+                        <div class='col-md-12 mt-4'>
+                            <label for='inputEmail4' class='form-label'>Phone Number</label>
+                            <input type='number' class='form-control' name='phone' required>
                         </div>
+
                     </div>
                     <div class='modal-footer'>
-                        <!-- <button type='button' class='btn btn-light' data-bs-dismiss='modal'>Tutu</button> -->
-                        <button class='btn btn-primary ' type='submit'>Add Student</button>
+                        <button class='btn btn-primary' type='submit'>Add Branch</button>
                     </div>
                 </form>
             </div><!-- /.modal-content -->
