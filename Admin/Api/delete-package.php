@@ -4,20 +4,20 @@ include('../../dbConnect.php');
 
 $id = $_GET['id'];
 
-    $sql2 = "DELETE FROM inventory WHERE id='$id'";
+    $sql2 = "DELETE FROM washPackage WHERE id='$id'";
     $run_query2 = mysqli_query($conn, $sql2);
         if ($conn->query($sql2) === TRUE) {
-                echo "<script>alert('Remove Success')</script>";
+                echo "<script>alert('Delete Successful')</script>";
                 echo "
                 <script type='text/javascript'>
-                   window.location.href ='../equipment.php';
+                   window.location.href ='../package-list.php';
                 </script>";
 
         } else {
-            echo "<script>alert('Error Remove')</script>";
+            echo "<script>alert('Something went wrong... Try Again !')</script>";
             echo "
             <script type='text/javascript'>
-               window.location.href ='../equipment.php';
+               window.location.href ='../package-list.php';
             </script>";
         }
 
