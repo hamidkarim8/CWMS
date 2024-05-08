@@ -40,7 +40,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </script>";
         } 
     } else {
-        $error = "Incorrect username or password!";
         echo "<script>alert('Incorrect username or password !');</script>";
         echo "
             <script type='text/javascript'>

@@ -13,6 +13,7 @@ $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 $fullname = $row['fullname'];
 $phone = $row['phone'];
+$email = $row['email'];
 $login_session = $_SESSION['login_user'];
 $role=$_SESSION['role'];
 

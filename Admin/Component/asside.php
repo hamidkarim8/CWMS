@@ -67,9 +67,9 @@
                     <a class="nav-link menu-link" href="branch-list.php">
                         <i class="mdi mdi-map-marker"></i> <span data-key="t-authentication">Branch</span>
                     </a>
-                    <a class="nav-link menu-link" href="#">
+                    <!-- <a class="nav-link menu-link" href="#">
                         <i class="mdi mdi-account-multiple-outline"></i> <span data-key="t-authentication">Customer</span>
-                    </a>
+                    </a> -->
                 </li>
                 <hr>
 

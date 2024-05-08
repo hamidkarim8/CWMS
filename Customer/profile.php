@@ -60,23 +60,23 @@
                             <div class="tab-pane active" id="personalDetails" role="tabpanel">
                                 <form action="Api/editProfile.php" method="post">
                                     <div class="row">
+                                    <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label for="firstnameInput" class="form-label">Username</label>
+                                                <input type="text" class="form-control" name="username" disabled value='<?php echo $login_session ?>'>
+                                            </div>
+                                        </div>
                                         <div class="col-lg-6">
                                             <div class="mb-3">
-                                                <label for="firstnameInput" class="form-label">Name</label>
-                                                <input type="text" class="form-control" name="nama" value='<?php echo $nama ?>'>
+                                                <label for="firstnameInput" class="form-label">Full Name</label>
+                                                <input type="text" class="form-control" name="fullname" value='<?php echo $fullname ?>'>
                                             </div>
                                         </div>
                                         <!--end col-->
                                         <div class="col-lg-6">
                                             <div class="mb-3">
-                                                <label for="lastnameInput" class="form-label">No I/C</label>
-                                                <input type="text" class="form-control" name="noKp" placeholder="Enter Ic Number" value='<?php echo $noKp ?>'>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
                                                 <label for="lastnameInput" class="form-label">Phone Number</label>
-                                                <input type="text" class="form-control" name="noFon" placeholder="Enter Phone Number" value='<?php echo $noFon ?>'>
+                                                <input type="text" class="form-control" name="phone" placeholder="Enter Phone Number" value='<?php echo $phone ?>'>
                                             </div>
                                         </div>
                                       
@@ -84,7 +84,7 @@
                                         <div class="col-lg-6">
                                             <div class="mb-3">
                                                 <label for="emailInput" class="form-label">Email</label>
-                                                <input type="email" class="form-control" name="email" disabled value='<?php echo $login_session ?>'>
+                                                <input type="email" class="form-control" name="email" value='<?php echo $email ?>'>
                                             </div>
                                         </div>
 
@@ -104,7 +104,7 @@
                                     <div class="row g-2">
                                         <div class="col-lg-4">
                                             <div>
-                                                <label for="oldpasswordInput" class="form-label">Password Before*</label>
+                                                <label for="oldpasswordInput" class="form-label">Current Password*</label>
                                                 <input type="password" class="form-control" id="oldpasswordInput" name="pass1">
                                             </div>
                                         </div>

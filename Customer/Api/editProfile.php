@@ -10,20 +10,20 @@ $login_session =$_SESSION['login_user'];
 $uid =$_SESSION['uid'];
 include_once("../../dbConnect.php");
 
-$nama=$_POST["nama"];
-$noKp=$_POST["noKp"] ?? null;
-
-            $sql = "UPDATE profile SET nama='$nama', noMatrik='$noKp'
+$fullname=$_POST["fullname"];
+$phone=$_POST["phone"];
+$email=$_POST["email"];
+            $sql = "UPDATE profile SET fullname='$fullname', phone='$phone', email='$email'
             WHERE user_id='$uid'";
             if ($conn->query($sql) === TRUE){
-              echo "<script>alert('Kemaskini Berjaya')</script>" ;
+              echo "<script>alert('Update Successful')</script>" ;
                     echo "
                     <script type='text/javascript'>
                 window.location.href ='../profile.php';
               </script>";
             }
             else{
-            echo "<script>alert('Ralat Kemaskini')</script>" ;
+            echo "<script>alert('Something went wrong... Try Again !')</script>" ;
                     echo "
                     <script type='text/javascript'>
                 window.location.href ='../profile.php';

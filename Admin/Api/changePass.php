@@ -29,19 +29,19 @@ while ($row = $result->fetch_assoc()) {
     $password = $row['password'];
     
     if ($pass1 !=$password){
-        echo "<script>alert('Kata Laluan Lama Salah')</script>" ;
+        echo "<script>alert('Incorrect Current Password')</script>" ;
     }
     else{
         if($pass2!=$pass3){
-            echo "<script>alert('Kata Laluan Tidak Sama')</script>" ;
+            echo "<script>alert('The Password Does Not Match')</script>" ;
         }
         else{
             $sql = "UPDATE user SET password='$pass2' WHERE id='$uid'";
             if ($conn->query($sql) === TRUE){
-                echo "<script>alert('Kata Laluan Berjaya Ditukar')</script>" ;
+                echo "<script>alert('Password Successfully Changed')</script>" ;
             }
             else{
-            echo "<script>alert('Kata Laluan Ralat Ditukar')</script>" ;
+            echo "<script>alert('Something went wrong.. Try Again !')</script>" ;
             }
             echo "
     <script type='text/javascript'>
