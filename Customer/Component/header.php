@@ -5,25 +5,25 @@
     <div class="d-flex">
         <!-- LOGO -->
         <div class="navbar-brand-box horizontal-logo">
-            <a href="index.html" class="logo logo-dark">
+            <a href="index.php" class="logo logo-dark">
                 <span class="logo-sm">
-                    <img src="../logo.png" alt="" height="80">
-                    <h4><b>SSEMS</b></h4>
+                    <img src="#" alt="" height="80">
+                    <h4><b>CWMS</b></h4>
                 </span>
                 <span class="logo-lg">
-                    <img src="../logo.png" alt="" height="80">
-                    <h4><b>SSEMS</b></h4>
+                    <img src="#" alt="" height="80">
+                    <h4><b>CWMS</b></h4>
                 </span>
             </a>
 
-            <a href="index.html" class="logo logo-light">
+            <a href="index.php" class="logo logo-light">
                 <span class="logo-sm">
-                    <img src="../logo.png" alt="" height="80">
-                    <h4><b>SSEMS</b></h4>
+                    <img src="#" alt="" height="80">
+                    <h4><b>CWMS</b></h4>
                 </span>
                 <span class="logo-lg">
-                    <img src="../logo.png" alt="" height="80">
-                    <h4><b>SSEMS</b></h4>
+                    <img src="#" alt="" height="80">
+                    <h4><b>CWMS</b></h4>
                 </span>
             </a>
         </div>
@@ -64,9 +64,9 @@
             </button>
             <div class="dropdown-menu dropdown-menu-end">
                 <!-- item-->
-                <h6 class="dropdown-header">Selamat Datang <?php echo $fullname;?>!</h6>
-                <a class="dropdown-item" href="profile.php"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profil</span></a>
-                <a class="dropdown-item" href="../logout.php"><i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle" data-key="t-logout">Log Keluar</span></a>
+                <h6 class="dropdown-header">Welcome <?php echo $fullname;?>!</h6>
+                <a class="dropdown-item" href="profile.php"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profile</span></a>
+                <a class="dropdown-item" href="../logout.php"><i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle" data-key="t-logout">Log Out</span></a>
             </div>
         </div>
     </div>
