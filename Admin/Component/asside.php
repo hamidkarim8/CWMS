@@ -61,7 +61,7 @@
                     <a class="nav-link menu-link" href="package-list.php">
                         <i class="mdi mdi-gift-outline"></i> <span data-key="t-authentication">Package</span>
                     </a>
-                    <a class="nav-link menu-link" href="#">
+                    <a class="nav-link menu-link" href="employee-list.php">
                         <i class="mdi mdi-account-tie"></i> <span data-key="t-authentication">Employee</span>
                     </a>
                     <a class="nav-link menu-link" href="#">
