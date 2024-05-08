@@ -65,6 +65,9 @@
                         <i class="mdi mdi-account-tie"></i> <span data-key="t-authentication">Employee</span>
                     </a>
                     <a class="nav-link menu-link" href="#">
+                        <i class="mdi mdi-map-marker"></i> <span data-key="t-authentication">Branch</span>
+                    </a>
+                    <a class="nav-link menu-link" href="#">
                         <i class="mdi mdi-account-multiple-outline"></i> <span data-key="t-authentication">Customer</span>
                     </a>
                 </li>
