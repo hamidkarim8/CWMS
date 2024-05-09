@@ -158,13 +158,13 @@
                                     echo "  <div class='$priceItemClass'>";
                                     echo "    <div class='price-header'>";
                                     echo "      <h3>$name</h3>";
-                                    echo "      <h2><span>$</span><strong>$price</strong></h2>";
+                                    echo "      <h2><span>RM</span><strong>$price</strong></h2>";
                                     echo "    </div>";
                                     echo "    <div class='price-body'>";
                                     echo "      <ul>";
 
                                     foreach ($descriptions as $desc) {
-                                        echo "        <li><i class='far fa-check-circle'></i> $desc</li>";
+                                        echo "        <li><i class='mdi mdi-check'></i> $desc</li>";
                                     }
 
                                     echo "      </ul>";

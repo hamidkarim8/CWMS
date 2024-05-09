@@ -43,28 +43,28 @@
                 </li> <!-- end Dashboard Menu -->
     
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#">
-                        <i class=" mdi-calendar-check"></i> <span data-key="t-authentication">Booking Appointment</span>
+                    <a class="nav-link menu-link" href="view-package.php">
+                        <i class="mdi mdi-gift-outline"></i> <span data-key="t-authentication">Washing Packages</span>
                     </a>
                     <a class="nav-link menu-link" href="#">
-                        <i class="mdi mdi-check-circle-outline"></i> <span data-key="t-authentication">Assign Task</span>
+                        <i class="mdi mdi-calendar-check"></i> <span data-key="t-authentication">Booking Appointment</span>
                     </a>
                 </li>
                 <hr>
-                <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-pages">Management</span></li>
+                <!-- <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-pages">Management</span></li> -->
 
-                <li class="nav-item">
+                <!-- <li class="nav-item">
               
                     <a class="nav-link menu-link" href="package-list.php">
                         <i class="mdi mdi-gift-outline"></i> <span data-key="t-authentication">Package</span>
                     </a>
                     <a class="nav-link menu-link" href="#">
-                        <i class="mdi mdi-account-tie"></i> <span data-key="t-authentication">Employee</span>
+                        <i class="mdi mdi-account-tie"></i> <span data-key="t-authentication">Employee</span>s
                     </a>
-                    <!-- <a class="nav-link menu-link" href="#">
+                     <a class="nav-link menu-link" href="#">
                         <i class="mdi mdi-account-multiple-outline"></i> <span data-key="t-authentication">Customer</span>
-                    </a> -->
-                </li>
+                    </a>
+                </li> -->
                 <hr>
                 
                 <li class="nav-item">

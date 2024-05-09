@@ -44,7 +44,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#">
-                        <i class=" mdi-calendar-check"></i> <span data-key="t-authentication">Booking Appointment</span>
+                        <i class="mdi mdi-calendar-check"></i> <span data-key="t-authentication">Booking Appointment</span>
                     </a>
                     <a class="nav-link menu-link" href="#">
                         <i class="mdi mdi-check-circle-outline"></i> <span data-key="t-authentication">Assign Task</span>
@@ -59,7 +59,7 @@
                 <li class="nav-item">
 
                     <a class="nav-link menu-link" href="package-list.php">
-                        <i class="mdi mdi-gift-outline"></i> <span data-key="t-authentication">Package</span>
+                        <i class="mdi mdi-gift-outline"></i> <span data-key="t-authentication">Washing Packages</span>
                     </a>
                     <a class="nav-link menu-link" href="employee-list.php">
                         <i class="mdi mdi-account-tie"></i> <span data-key="t-authentication">Employee</span>
