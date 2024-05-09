@@ -44,10 +44,10 @@
     
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="view-package.php">
-                        <i class="mdi mdi-gift-outline"></i> <span data-key="t-authentication">Washing Packages</span>
+                        <i class="mdi mdi-gift-outline"></i> <span data-key="t-authentication">Booking Appointment</span>
                     </a>
-                    <a class="nav-link menu-link" href="#">
-                        <i class="mdi mdi-calendar-check"></i> <span data-key="t-authentication">Booking Appointment</span>
+                    <a class="nav-link menu-link" href="view-appointment.php">
+                        <i class="mdi mdi-calendar-check"></i> <span data-key="t-authentication">Appointment History</span>
                     </a>
                 </li>
                 <hr>

@@ -24,7 +24,8 @@
         }
 
         .price-item:hover {
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);        }
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
 
         .price-header {
             text-align: center;
@@ -80,6 +81,7 @@
             border: 2px solid #007bff;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
         }
+
         .featured-item:hover {
             box-shadow: 0 30px 50px rgba(0, 0, 0, 0.5);
         }
@@ -183,10 +185,57 @@
                                         <form method='post' action='Api/book-package.php'>
                                             <div class='modal-body'>
                                                 <div class='mb-3'>
-                                                    <label class='form-label'>Package ID</label>
-                                                    <input type='text' class='form-control' value='$id' disabled>
+                                                    <label class='form-label'>Package Name</label>
+                                                    <input type='text' class='form-control' value='$name' disabled>
                                                 </div>
-                                                <input type='hidden' value='$id' name='id' />
+                                                
+                                                <!-- Branch Selection -->
+                                                <div class='mb-3'>
+                                                    <label class='form-label'>Select Branch</label>
+                                                    <select class='form-control' name='branchID' required>";
+
+                                                $branch_query = "SELECT id, name FROM branch;";
+
+                                                $branch_result = $conn->query($branch_query);
+
+                                                if ($branch_result->num_rows > 0) {
+                                                    while ($branch_row = $branch_result->fetch_assoc()) {
+                                                        echo "<option value='{$branch_row['id']}'>{$branch_row['name']}</option>";
+                                                    }
+                                                }
+                                                echo "
+                                                    </select>
+                                                </div>
+
+                                                <!-- Time Selection -->
+                                                <div class='mb-3'>
+                                                <label class='form-label'>Select Date</label>
+                                                <input type='date' class='form-control' name='appointmentDate' required />
+                                            </div>
+                                            
+                                            <div class='mb-3'>
+                                                <label class='form-label'>Select Time</label>
+                                                <input type='time' class='form-control' name='appointmentTime' required
+                                                    min='08:00' max='17:00' 
+                                                    step='1800'
+                                                />
+                                            </div>
+
+                                                <!-- Vehicle Information -->
+                                                <div class='mb-3'>
+                                                    <label class='form-label'>Vehicle Plate Number</label>
+                                                    <input type='text' class='form-control' name='plateNo' placeholder='Enter Plate Number' required />
+                                                </div>
+                                                <div class='mb-3'>
+                                                    <label class='form-label'>Vehicle Model</label>
+                                                    <input type='text' class='form-control' name='model' placeholder='Enter Vehicle Model' required />
+                                                </div>
+                                                <div class='mb-3'>
+                                                    <label class='form-label'>Vehicle Color</label>
+                                                    <input type='text' class='form-control' name='color' placeholder='Enter Vehicle Color' required />
+                                                </div>
+
+                                                <input type='hidden' value='$id' name='washPackID' />
                                             </div>
                                             <div class='modal-footer'>
                                                 <button class='btn btn-primary' type='submit'>Confirm</button>
@@ -211,6 +260,7 @@
                         </div>
                     </div>
                     <!-- end content -->
+
 
                 </div>
             </div>
