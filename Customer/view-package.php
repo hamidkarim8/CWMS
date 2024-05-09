@@ -116,77 +116,73 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                <h4 class="mb-sm-0">Dashboard</h4>
-
-                                <div class="page-title-right">
-                                    <ol class="breadcrumb m-0">
-                                        <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboards</a></li>
-                                        <li class="breadcrumb-item active">Dashboard</li>
-                                    </ol>
-                                </div>
-
+                                <h4 class="mb-sm-0">Washing Packages</h4>
                             </div>
                         </div>
                     </div>
-                    <!-- end page title -->
 
-                    <div class="container">
-                        <div class="section-header text-center">
-                            <p>Washing Plan</p>
-                            <h2>Choose Your Plan</h2>
-                        </div>
+                    <div class="card-header">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="container">
+                                    <div class="section-header text-center mb-4 mt-2">
+                                        <h2>Choose Your Package</h2>
+                                    </div>
 
-                        <div class="row justify-content-center">
-                            <?php
-                            include('../dbConnect.php');
+                                    <div class="row justify-content-center">
+                                        <?php
+                                        include('../dbConnect.php');
 
-                            $query = "SELECT * FROM washPackage;";
-                            $result = $conn->query($query);
+                                        $query = "SELECT * FROM washPackage;";
+                                        $result = $conn->query($query);
 
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    $name = $row['name'];
-                                    $price = number_format($row['price'], 2);
-                                    $duration = $row['duration'];
-                                    $isFeatured = $row['isFeatured'];
+                                        if ($result->num_rows > 0) {
+                                            while ($row = $result->fetch_assoc()) {
+                                                $name = $row['name'];
+                                                $price = number_format($row['price'], 2);
+                                                $duration = $row['duration'];
+                                                $isFeatured = $row['isFeatured'];
 
-                                    $priceItemClass = $isFeatured == 1 ? 'price-item featured-item' : 'price-item';
+                                                $priceItemClass = $isFeatured == 1 ? 'price-item featured-item' : 'price-item';
 
-                                    $descriptions = preg_split('/,\s*/', $row['description']);
+                                                $descriptions = preg_split('/,\s*/', $row['description']);
 
-                                    echo "<div class='col-md-4'>";
-                                    echo "  <div class='$priceItemClass'>";
-                                    echo "    <div class='price-header'>";
-                                    echo "      <h3>$name</h3>";
-                                    echo "      <h2><span>RM</span><strong>$price</strong></h2>";
-                                    echo "    </div>";
-                                    echo "    <div class='price-body'>";
-                                    echo "      <ul>";
+                                                echo "<div class='col-md-4'>";
+                                                echo "  <div class='$priceItemClass'>";
+                                                echo "    <div class='price-header'>";
+                                                echo "      <h3>$name</h3>";
+                                                echo "      <h2><span>RM</span><strong>$price</strong></h2>";
+                                                echo "    </div>";
+                                                echo "    <div class='price-body'>";
+                                                echo "      <ul>";
 
-                                    foreach ($descriptions as $desc) {
-                                        echo "        <li><i class='mdi mdi-check'></i> $desc</li>";
-                                    }
+                                                foreach ($descriptions as $desc) {
+                                                    echo "        <li><i class='mdi mdi-check'></i> $desc</li>";
+                                                }
 
-                                    echo "      </ul>";
-                                    echo "    </div>";
-                                    echo "    <div class='price-footer'>";
-                                    echo "      <a class='btn btn-custom' data-toggle='modal' data-target='#myModal'>Book Now</a>";
-                                    echo "    </div>";
-                                    echo "  </div>";
-                                    echo "</div>";
-                                }
-                            } else {
-                                echo "<div class='col-md-12'>";
-                                echo "  <div class='alert alert-warning text-center'>No Packages Available</div>";
-                                echo "</div>";
-                            }
-                            ?>
+                                                echo "      </ul>";
+                                                echo "    </div>";
+                                                echo "    <div class='price-footer'>";
+                                                echo "      <a class='btn btn-custom' data-toggle='modal' data-target='#myModal'>Book Now</a>";
+                                                echo "    </div>";
+                                                echo "  </div>";
+                                                echo "</div>";
+                                            }
+                                        } else {
+                                            echo "<div class='col-md-12'>";
+                                            echo "  <div class='alert alert-warning text-center'>No Packages Available</div>";
+                                            echo "</div>";
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <!-- container-fluid -->
                         </div>
                     </div>
-
-
                 </div>
-                <!-- container-fluid -->
             </div>
             <!-- End Page-content -->
 
