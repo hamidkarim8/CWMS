@@ -19,13 +19,12 @@
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            transition: transform 0.3s;
+            transition: box-shadow 0.3s ease;
             margin-bottom: 20px;
         }
 
         .price-item:hover {
-            transform: translateY(-10px);
-        }
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);        }
 
         .price-header {
             text-align: center;
@@ -34,6 +33,7 @@
         .price-header h3 {
             font-size: 1.5rem;
             margin-bottom: 10px;
+            color: #000;
         }
 
         .price-header h2 {
@@ -43,6 +43,7 @@
 
         .price-body {
             text-align: left;
+            color: #000;
         }
 
         .price-body ul {
@@ -78,6 +79,9 @@
         .featured-item {
             border: 2px solid #007bff;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+        .featured-item:hover {
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.5);
         }
 
         @media (max-width: 768px) {
@@ -121,6 +125,7 @@
                         </div>
                     </div>
 
+                    <!-- start content -->
                     <div class="card-header">
                         <div class="card">
                             <div class="card-body">
@@ -138,6 +143,7 @@
 
                                         if ($result->num_rows > 0) {
                                             while ($row = $result->fetch_assoc()) {
+                                                $id = $row['id'];
                                                 $name = $row['name'];
                                                 $price = number_format($row['price'], 2);
                                                 $duration = $row['duration'];
@@ -163,10 +169,35 @@
                                                 echo "      </ul>";
                                                 echo "    </div>";
                                                 echo "    <div class='price-footer'>";
-                                                echo "      <a class='btn btn-custom' data-toggle='modal' data-target='#myModal'>Book Now</a>";
+                                                echo "      <button type='button' class='btn btn-primary btn-animation waves-effect waves-light' data-bs-toggle='modal' data-bs-target='#modalBook$id'>Book Now</button>";
                                                 echo "    </div>";
-                                                echo "  </div>";
-                                                echo "</div>";
+
+                                                echo "
+                            <div id='modalBook$id' class='modal fade' tabindex='1' aria-labelledby='modalBook$id-label' aria-hidden='true'>
+                                <div class='modal-dialog'>
+                                    <div class='modal-content'>
+                                        <div class='modal-header'>
+                                            <h5 class='modal-title' id='modalBook$id-label'>Book Package Appointment</h5>
+                                            <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                        </div>
+                                        <form method='post' action='Api/book-package.php'>
+                                            <div class='modal-body'>
+                                                <div class='mb-3'>
+                                                    <label class='form-label'>Package ID</label>
+                                                    <input type='text' class='form-control' value='$id' disabled>
+                                                </div>
+                                                <input type='hidden' value='$id' name='id' />
+                                            </div>
+                                            <div class='modal-footer'>
+                                                <button class='btn btn-primary' type='submit'>Confirm</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            ";
+                                                echo "  </div>"; // End of price item
+                                                echo "</div>"; // End of col-md-4
                                             }
                                         } else {
                                             echo "<div class='col-md-12'>";
@@ -176,12 +207,11 @@
                                         ?>
                                     </div>
                                 </div>
-
-
                             </div>
-                            <!-- container-fluid -->
                         </div>
                     </div>
+                    <!-- end content -->
+
                 </div>
             </div>
             <!-- End Page-content -->

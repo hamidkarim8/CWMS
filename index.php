@@ -27,7 +27,7 @@
             background-image: url('car-wash-login.jpg'); 
             background-size: cover;
             background-position: center;
-            filter: blur(4px);
+            /* filter: blur(4px); */
             z-index: 0;
         }
 

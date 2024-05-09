@@ -4,22 +4,22 @@
         <!-- Dark Logo-->
         <a href="index.php" class="logo logo-dark">
                 <span class="logo-sm">
-                    <img src="#" alt="" height="80">
+                    <img src="#" alt="logo"height="80">
                     <h4><b>CWMS</b></h4>
                 </span>
                 <span class="logo-lg">
-                    <img src="#" alt="" height="80">
+                    <img src="#" alt="logo"height="80">
                     <h4><b>CWMS</b></h4>
                 </span>
         </a>
         <!-- Light Logo-->
         <a href="index.php" class="logo logo-light">
                 <span class="logo-sm">
-                    <img src="#" alt="" height="80">
+                    <img src="#" alt="logo"height="80">
                     <h4><b>CWMS</b></h4>
                 </span>
                 <span class="logo-lg">
-                    <img src="#" alt="" height="80">
+                    <img src="#" alt="logo"height="80">
                     <h4><b>CWMS</b></h4>
                 </span>
         </a>
