@@ -7,22 +7,22 @@
         <div class="navbar-brand-box horizontal-logo">
             <a href="index.php" class="logo logo-dark">
                 <span class="logo-sm">
-                    <img src="#" alt="" height="80">
+                    <img src="../cwms-logo.png" alt="" height="80">
                     <h4><b>CWMS</b></h4>
                 </span>
                 <span class="logo-lg">
-                    <img src="#" alt="" height="80">
+                    <img src="../cwms-logo.png" alt="" height="80">
                     <h4><b>CWMS</b></h4>
                 </span>
             </a>
 
             <a href="index.php" class="logo logo-light">
                 <span class="logo-sm">
-                    <img src="#" alt="" height="80">
+                    <img src="../cwms-logo.png" alt="" height="80">
                     <h4><b>CWMS</b></h4>
                 </span>
                 <span class="logo-lg">
-                    <img src="#" alt="" height="80">
+                    <img src="../cwms-logo.png" alt="" height="80">
                     <h4><b>CWMS</b></h4>
                 </span>
             </a>

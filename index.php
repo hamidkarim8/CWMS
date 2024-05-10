@@ -80,16 +80,16 @@
             font-size: 14px;
         }
 
-        .cwms-logo {
-            margin-bottom: 20px;
-        }
+        /* .cwms-logo {
+            margin-bottom: 10px;
+        } */
     </style>
 </head>
 
 <body>
     <div class="login-container">
         <div class="cwms-logo">
-            <img src="#" alt="CWMS Logo" width="200">
+            <img src="cwms-logo.png" alt="CWMS Logo" width="200">
         </div>
         <h2>Login</h2>
         <form action="getIn.php" method="post">
