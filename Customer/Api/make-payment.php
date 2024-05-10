@@ -46,7 +46,7 @@ $paymentProofPath = null;
 
 if ($paymentMethod === 'online') {
     if ($paymentProof && $paymentProof['size'] > 0) {
-        $allowedFileTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+        $allowedFileTypes = ['application/pdf', 'image/jpeg', 'image/jpg','image/png'];
         if (!in_array($paymentProof['type'], $allowedFileTypes) || $paymentProof['size'] > 5000000) {
             echo "
             <script type='text/javascript'>
