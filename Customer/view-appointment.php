@@ -57,6 +57,7 @@
         .status-declined {
             background-color: #f44336;
         }
+
         .status-paid {
             background-color: #9c27b0;
         }
@@ -133,7 +134,8 @@
         v.plateNo AS vehicle_plate,
         v.model AS vehicle_model,
         v.color AS vehicle_color,
-        wp.price AS package_price
+        wp.price AS package_price,
+        f.id AS feedback_id
     FROM 
         appointment a
     JOIN 
@@ -144,6 +146,8 @@
         vehicle v ON a.vehicleID = v.id
     JOIN 
         customer c ON a.custID = c.id
+    LEFT JOIN
+        feedback f ON f.apptID = a.id
     WHERE 
         c.userID = ?
     ORDER BY 
@@ -185,6 +189,11 @@
                                                                 <?php if ($row['status'] === 'Accepted') : ?>
                                                                     <a href="#" style="text-decoration: underline" data-bs-toggle="modal" data-bs-target="#paymentModal<?php echo $row['appointment_id']; ?>" class="d-block mt-2">
                                                                         Make Payment
+                                                                    </a>
+                                                                <?php endif; ?>
+                                                                <?php if ($row['status'] === 'Completed' && !$row['feedback_id']) : ?>
+                                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#feedbackModal<?php echo $row['appointment_id']; ?>" class="d-block mt-2">
+                                                                        Give Feedback
                                                                     </a>
                                                                 <?php endif; ?>
                                                             </div>
@@ -229,6 +238,36 @@
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="submit" class="btn btn-primary">Confirm</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Modal for Feedback -->
+                                                <div id="feedbackModal<?php echo $row['appointment_id']; ?>" class="modal fade" tabindex="-1" aria-labelledby="feedbackModalLabel<?php echo $row['appointment_id']; ?>" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="feedbackModalLabel<?php echo $row['appointment_id']; ?>">Give Feedback for Appointment ID #<?php echo $row['appointment_id']; ?></h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                            </div>
+                                                            <form method="post" action="Api/give-feedback.php">
+                                                                <input type="hidden" name="appointment_id" value="<?php echo $row['appointment_id']; ?>">
+                                                                <div class="modal-body">
+                                                                    <label for="rating">Rate your experience:</label>
+                                                                    <select name="rating" id="rating" class="form-select">
+                                                                        <option value="1">☆</option>
+                                                                        <option value="2">☆☆</option>
+                                                                        <option value="3">☆☆☆</option>
+                                                                        <option value="4">☆☆☆☆</option>
+                                                                        <option value="5">☆☆☆☆☆</option>
+                                                                    </select>
+
+                                                                    <label for="comment" class="mt-3">Comments:</label>
+                                                                    <textarea name="comment" id="comment" class="form-control" rows="4" placeholder="Your feedback..."></textarea>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="submit" class="btn btn-primary">Submit</button>
                                                                 </div>
                                                             </form>
                                                         </div>
