@@ -31,7 +31,7 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                <h4 class="mb-sm-0">Appointment List</h4>
+                                <h4 class="mb-sm-0">Feedback List</h4>
                             </div>
                         </div>
                     </div>
@@ -40,269 +40,97 @@
                     <div class="card-header">
                         <div class="card">
                             <div class="card-body">
-                                <!-- Dropdown to filter by status -->
-                                <div class="d-flex justify-content-between align-items-center mb-4">
-                                    <div style="width: 200px;">
-                                        <select class="form-select" id="statusFilter" onchange="filterByStatus()">
-                                            <option value="All">All</option>
-                                            <option value="Pending">Pending</option>
-                                            <option value="Accepted">Accepted</option>
-                                            <option value="Declined">Declined</option>
-                                            <option value="Paid">Paid</option>
-                                            <option value="Completed">Completed</option>
-                                        </select>
-                                    </div>
-                                </div>
+                                <!-- <button type="button" class="btn btn-success btn-animation waves-effect waves-light" data-text="Add Package" data-bs-toggle="modal" data-bs-target="#myModal"><span>Add Package</span></button> -->
+                                <br>
+                                <br>
                                 <div class="table-responsive">
                                     <table class="table table-primary table-striped align-middle table-nowrap mb-0">
                                         <thead>
                                             <tr>
                                                 <th scope="col">No</th>
-                                                <th scope="col">Package</th>
-                                                <th scope="col">Customer</th>
-                                                <th scope="col">Branch</th>
-                                                <th scope="col">Employee</th>
-                                                <th scope="col">Vehicle</th>
-                                                <th scope="col">Date</th>
-                                                <th scope="col">Time</th>
+                                                <th scope="col">Rate</th>
+                                                <th scope="col">Comment</th>
+                                                <th scope="col">Customer Name</th>
+                                                <th scope="col">Appointment ID</th>
                                                 <th scope="col" class="text-center">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php
                                             include('../dbConnect.php');
+                                            $feedback_query = "
+                                            SELECT
+                                            f.id AS feedback_id,
+                                            f.rate,
+                                            f.comment,
+                                            p.fullname AS customer_name,
+                                            f.apptID AS appointment_id
+                                        FROM
+                                            feedback f
+                                         JOIN 
+                                             user u ON u.id = f.custID
+                                        JOIN
+                                             profile p ON p.user_id = u.id
+                                        ORDER BY
+                                            f.id DESC
+                                                                                       ";
 
-                                            $query = "
-                            SELECT
-                                a.id AS appointment_id,
-                                wp.name AS package_name,
-                                c.userID AS user_id,
-                                u.id AS customer_id,
-                                b.name AS branch_name,
-                                b.id AS branch_id,
-                                p.fullname AS customer_name,
-                                GROUP_CONCAT(e.name) AS employee_names,
-                                v.plateNo AS vehicle_plate,
-                                v.model AS vehicle_model,
-                                v.color AS vehicle_color,
-                                a.date AS appointment_date,
-                                a.start_time,
-                                a.end_time,
-                                a.status,
-                                py.amount AS payment_amount,
-                                py.paymentMethod AS payment_method,
-                                py.paymentProofPath AS payment_proof_path
-                            FROM
-                                appointment a
-                            JOIN
-                                washPackage wp ON a.washPackID = wp.id
-                            JOIN
-                                branch b ON a.branchID = b.id
-                            JOIN
-                                customer c ON a.custID = c.id
-							JOIN
-								user u ON c.userID= u.id
-                            JOIN
-                                vehicle v ON a.vehicleID = v.id
-							JOIN
-								profile p ON p.user_id = u.id
-                            LEFT JOIN
-                                appointmentEmp ae ON a.id = ae.apptID
-                            LEFT JOIN
-                                employee e ON ae.empID = e.id
-                                LEFT JOIN
-                                payment py ON py.apptID = a.id
-                            GROUP BY
-                                a.id
-                            ORDER BY
-                                a.date, a.start_time
-                        ";
+                                            $feedback_result = $conn->query($feedback_query);
 
-                                            $stmt = $conn->prepare($query);
-                                            $stmt->execute();
-                                            $result = $stmt->get_result();
-
-                                            $modal_id = 1; // To assign unique IDs to modals
-                                            $counter = 1;
-                                            if ($result->num_rows > 0) :
-                                                while ($row = $result->fetch_assoc()) :
-                                                    $appointment_id = $row['appointment_id'];
-                                                    $package_name = $row['package_name'];
+                                            if ($feedback_result->num_rows > 0) {
+                                                $counter = 1;
+                                                while ($row = $feedback_result->fetch_assoc()) {
+                                                    $feedback_id = $row['feedback_id'];
+                                                    $rate = $row['rate'];
+                                                    $stars = str_repeat('☆', $rate);
+                                                    $comment = $row['comment'];
                                                     $customer_name = $row['customer_name'];
-                                                    $branch_name = $row['branch_name'];
-                                                    $employee_names = $row['employee_names'] ?: 'Not Assigned';
-                                                    $employee_names_display = $employee_names == 'Not Assigned' ? "<span style='color: red;'>$employee_names</span>" : $employee_names;
-                                                    $vehicle_details = "{$row['vehicle_plate']} ({$row['vehicle_model']} - {$row['vehicle_color']})";
-                                                    $appointment_date = $row['appointment_date'];
-                                                    $appointment_time = "{$row['start_time']} - {$row['end_time']}";
-                                                    $status = ucfirst($row['status']);
-                                                    $payment_amount = $row['payment_amount'];
-                                                    $payment_method = $row['payment_method'];
-                                                    $payment_proof_path = $row['payment_proof_path'];
-
-                                                    echo "<tr class='status-{$status}'>";
-                                                    echo "<td>{$counter}</td>";
-                                                    echo "<td>{$package_name}</td>";
-                                                    echo "<td>{$customer_name}</td>";
-                                                    echo "<td>{$branch_name}</td>";
-                                                    echo "<td>{$employee_names_display}</td>";
-                                                    echo "<td>{$vehicle_details}</td>";
-                                                    echo "<td>{$appointment_date}</td>";
-                                                    echo "<td>{$appointment_time}</td>";
-                                                    echo "<td class='text-center'>";
-
-                                                    // Show Accept and Decline buttons when status is Pending
-                                                    if ($status == 'Pending') :
-                                                        echo "
-        <a href='./Api/accept-appointment.php?id=$appointment_id' class='btn btn-success btn-animation waves-effect waves-light'>
-            Accept
-        </a>
-        <a href='./Api/decline-appointment.php?id=$appointment_id' class='btn btn-danger btn-animation waves-effect waves-light'>
-            Decline
-        </a>
-    ";
-
-                                                    // Show Pending Payment badge when status is Accepted
-                                                    elseif ($status == 'Accepted') :
-                                                        echo "<span class='badge bg-warning'>Pending Payment</span>";
-
-                                                    // Show Declined badge when status is Declined
-                                                    elseif ($status == 'Declined') :
-                                                        echo "<span class='badge bg-danger'>Declined</span>";
-
-                                                    // If status is Paid and no employee has been assigned, show Assign Employee button
-                                                    elseif ($status == 'Paid' && $employee_names_display == "<span style='color: red;'>Not Assigned</span>") :
-                                                        echo "<span class='ms-2' data-bs-toggle='tooltip' title='View Proof of Payment'>
-                                                        <i class='mdi mdi-eye' style='cursor: pointer;' data-bs-toggle='modal' data-bs-target='#viewPayment{$modal_id}'></i>
-                                                    <br/></span>";
-                                                        echo "
-        <button type='button' class='btn btn-primary btn-animation waves-effect waves-light' data-bs-toggle='modal' data-bs-target='#assignEmployee{$modal_id}'>
-            Assign Task
-        </button>
-    ";
-
-                                                    // If status is Paid and at least one employee is assigned, show In Progress badge and Complete button
-                                                    elseif ($status == 'Paid' && $employee_names_display != "<span style='color: red;'>Not Assigned</span>") :
-                                                        echo "<span class='badge bg-info'>In Progress</span>";
-                                                        echo "
-        <br/><a href='./Api/complete-appointment.php?id=$appointment_id' class='btn btn-primary btn-animation waves-effect waves-light mt-2'>
-            Complete
-        </a>
-    ";
-
-                                                    // Show Completed badge when status is Completed
-                                                    elseif ($status == 'Completed') :
-                                                        echo "<span class='badge bg-success'>Completed</span>";
-
-                                                    endif;
-
-                                                    echo "</td>";
-                                                    echo "</tr>";
-                                                    // Payment proof modal
-                                                    echo "
-                                                    <div id='viewPayment{$modal_id}' class='modal fade' tabindex='-1' aria-labelledby='viewPaymentLabel{$modal_id}' aria-hidden='true'>
-                                                        <div class='modal-dialog modal-dialog-centered' role='document'>
-                                                            <div class='modal-content'>
-                                                                <div class='modal-header'>
-                                                                    <h5 class='modal-title' id='viewPaymentLabel{$modal_id}'>Payment Information for Appointment ID #{$appointment_id}</h5>
-                                                                    <button type='button' class='btn-close' data-bs-dismiss='modal'></button>
-                                                                </div>
-                                                                <div class='modal-body'>
-                                                                    <p><strong>Price:</strong> RM{$payment_amount}</p>
-                                                                    <p><strong>Payment Method:</strong> {$payment_method}</p>
-                                                                    ";
-
-                                                    if ($payment_proof_path) {
-                                                        $is_pdf = pathinfo($payment_proof_path, PATHINFO_EXTENSION) === 'pdf';
-
-                                                        if ($is_pdf) {
-                                                            echo "
-                                                            <p><strong>Proof of Payment (PDF):</strong></p>
-                                                            <iframe src='{$payment_proof_path}' style='width:100%; height:400px;' frameborder='0'></iframe>
-                                                        ";
-                                                        } else {
-                                                            echo "
-                                                            <p><strong>Proof of Payment (Image):</strong></p>
-                                                            <img src='{$payment_proof_path}' alt='Proof of Payment' style='max-width:100%; height:auto;'>
-                                                        ";
-                                                        }
-                                                    } else {
-                                                        echo "<p>Payment made by cash at the counter.</p>";
-                                                    }
+                                                    $appointment_id = $row['appointment_id'];
 
                                                     echo "
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                ";
+                                                   <tr>
+                                                       <th scope='row'>{$counter}</th>
+                                                       <td>{$stars}</td>
+                                                       <td>{$comment}</td>
+                                                       <td>{$customer_name}</td>
+                                                       <td>{$appointment_id}</td>
+                                                       <td>
+                                                           <center>
+                                                               <button type='button' class='btn btn-primary btn-animation waves-effect waves-light' data-bs-toggle='modal' data-bs-target='#viewFeedback{$feedback_id}'>
+                                                                   View
+                                                               </button>
+                                                               <a href='./Api/delete-feedback.php?id={$feedback_id}' class='btn btn-danger btn-animation waves-effect waves-light'>
+                                                                   Delete
+                                                               </a>
+                                                           </center>
+                                                       </td>
+                                                   </tr>
+                                                   ";
 
-                                                    // Modal for assigning employees
+                                                    // Modal for viewing detailed feedback
                                                     echo "
-                                <div id='assignEmployee{$modal_id}' class='modal fade' tabindex='-1' aria-labelledby='assignEmployee{$modal_id}Label' aria-hidden='true'>
-                                    <div class='modal-dialog'>
-                                        <div class='modal-content'>
-                                            <div class='modal-header'>
-                                                <h5 class='modal-title' id='assignEmployee{$modal_id}Label'>Assign Employee to Appointment ID #{$appointment_id} ({$appointment_date}) ({$appointment_time}) at Branch {$branch_name}</h5>
-                                                <button type='button' class='btn-close' data-bs-dismiss='modal'></button>
-                                            </div>
-                                            <form method='post' action='Api/assign-employee.php'>
-                                                <div class='modal-body'>
-                                                    <input type='hidden' name='appointment_id' value='{$appointment_id}'>
-                                                    <label>Select Employee(s)</label>
-                                                    <div class='form-group'>";
+                                                   <div id='viewFeedback{$feedback_id}' class='modal fade' tabindex='-1' aria-labelledby='viewFeedbackLabel{$feedback_id}' aria-hidden='true'>
+                                                       <div class='modal-dialog'>
+                                                           <div class='modal-content'>
+                                                               <div class='modal-header'>
+                                                                   <h5 class='modal-title' id='viewFeedbackLabel{$feedback_id}'>Feedback for Appointment ID #{$appointment_id}</h5>
+                                                                   <button type='button' class='btn-close' data-bs-dismiss='modal'></button>
+                                                               </div>
+                                                               <div class='modal-body'>
+                                                                   <p><strong>Rating:</strong> {$rate} Stars</p>
+                                                                   <p><strong>Comment:</strong> {$comment}</p>
+                                                                   <p><strong>Customer:</strong> {$customer_name}</p>
+                                                               </div>
+                                                           </div>
+                                                       </div>
+                                                   </div>
+                                                   ";
 
-                                                    // Fetching employees based on the branch
-                                                    $emp_query = "
-                                                        SELECT 
-                                                            id, name, position 
-                                                        FROM 
-                                                            employee 
-                                                        WHERE 
-                                                            branchID = ? AND isAvailable = 1
-                                                    ";
-                                                    $emp_stmt = $conn->prepare($emp_query);
-                                                    $emp_stmt->bind_param('i', $row['branch_id']);
-                                                    $emp_stmt->execute();
-                                                    $emp_result = $emp_stmt->get_result();
-                                                    if ($emp_result->num_rows > 0) {
-                                                        // Display the employee checkboxes
-                                                        while ($emp_row = $emp_result->fetch_assoc()) {
-                                                            echo "<div class='form-check'>
-                                                                <input type='checkbox' name='employee_ids[]' value='{$emp_row['id']}'>
-                                                                <label>{$emp_row['name']} - {$emp_row['position']}</label>
-                                                            </div>";
-                                                        }
-                                                    } else {
-                                                        echo "<p>No employees found for this branch.</p>";
-                                                        // echo "<script>console.log('Branch ID: {$row['branch_id']}');</script>";
-
-                                                    }
-                                                    // while ($emp_row = $emp_result->fetch_assoc()) {
-                                                    //     echo "<div class='form-check'>
-                                                    //         <input type='checkbox' name='employee_ids[]' value='{$emp_row['id']}'>
-                                                    //         <label>{$emp_row['name']} - {$emp_row['position']}</label>
-                                                    //     </div>";
-                                                    // }
-
-                                                    echo "
-                                                    </div>
-                                                </div>
-                                                <div class='modal-footer'>
-                                                    <button type='submit' class='btn btn-primary'>Assign</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                ";
-
-                                                    $modal_id++;
                                                     $counter++;
-                                                endwhile;
-                                            else :
-                                                echo "<tr><td colspan='9' class='text-center'>No appointments found.</td></tr>";
-                                            endif;
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan='6' class='text-center text-danger'>No feedback found.</td></tr>";
+                                            }
                                             ?>
                                         </tbody>
                                     </table>
@@ -310,16 +138,16 @@
                             </div>
                         </div>
                     </div>
-                    <!-- end content -->
-                </div>
-                <!-- container-fluid -->
+                </div> <!-- end col -->
             </div>
-            <!-- End Page-content -->
         </div>
-        <!-- end main content-->
+        <!-- container-fluid -->
+    </div>
+    <!-- End Page-content -->
+    </div>
+    <!-- end main content-->
     </div>
     <!-- END layout-wrapper -->
-
 
 
     <!--start back-to-top-->
@@ -1001,21 +829,6 @@
     </div>
 
     <?php include 'Component/javascript.php' ?>
-    <script>
-        function filterByStatus() {
-            const statusFilter = document.getElementById("statusFilter").value;
-            const rows = document.querySelectorAll(".table tbody tr");
-
-            rows.forEach((row) => {
-                const status = row.className.split("status-")[1];
-                if (statusFilter === "All" || status.toLowerCase() === statusFilter.toLowerCase()) {
-                    row.style.display = "table-row";
-                } else {
-                    row.style.display = "none";
-                }
-            });
-        }
-    </script>
 </body>
 
 </html>

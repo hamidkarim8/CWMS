@@ -94,10 +94,10 @@
             <td>$is_available_text</td>
             <td>
                 <center>
-                    <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#view2$modal'>
+                    <button type='button' class='btn btn-primary btn-animation waves-effect waves-light' data-bs-toggle='modal' data-bs-target='#view2$modal'>
                         Update
                     </button>
-                    <a href='./Api/delete-employee.php?id=$id' class='btn btn-danger'>
+                    <a href='./Api/delete-employee.php?id=$id' class='btn btn-danger btn-animation waves-effect waves-light'>
                         Delete
                     </a>
                 </center>

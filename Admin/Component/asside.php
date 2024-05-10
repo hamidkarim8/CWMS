@@ -49,7 +49,7 @@
                     <!-- <a class="nav-link menu-link" href="#">
                         <i class="mdi mdi-check-circle-outline"></i> <span data-key="t-authentication">Assign Task</span>
                     </a> -->
-                    <a class="nav-link menu-link" href="#">
+                    <a class="nav-link menu-link" href="feedback-list.php">
                         <i class="mdi mdi-comment-outline"></i> <span data-key="t-authentication">Feedback</span>
                     </a>
                 </li>

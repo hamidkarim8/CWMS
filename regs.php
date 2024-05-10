@@ -19,7 +19,7 @@ $role="Customer";
         $count = mysqli_num_rows($result);
         $userId = $row['id'];
 
-        $query1="INSERT INTO profile (user_id,fullname, phone) VALUES ('$userId','$fullname','$phone')";
+        $query1="INSERT INTO profile (user_id,fullname, phone, email) VALUES ('$userId','$fullname','$phone', '$email')";
         $run_query1=mysqli_query($conn,$query1);
         if($run_query1){
             echo "
