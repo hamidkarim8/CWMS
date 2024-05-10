@@ -99,6 +99,15 @@ $updateStmt = $conn->prepare($updateAppointmentQuery);
 $updateStmt->bind_param('ii', $custID, $appointmentID);
 $updateStmt->execute();
 
+$updateVehicleQuery = "
+    UPDATE vehicle 
+    SET custID = ? 
+    WHERE id = ?
+";
+$updateStmt = $conn->prepare($updateVehicleQuery);
+$updateStmt->bind_param('ii', $custID, $vehicleID);
+$updateStmt->execute();
+
 echo "
     <script type='text/javascript'>
         alert('Appointment booked successfully!');

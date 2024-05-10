@@ -88,7 +88,10 @@
                                 a.date AS appointment_date,
                                 a.start_time,
                                 a.end_time,
-                                a.status
+                                a.status,
+                                py.amount AS payment_amount,
+                                py.paymentMethod AS payment_method,
+                                py.paymentProofPath AS payment_proof_path
                             FROM
                                 appointment a
                             JOIN
@@ -107,6 +110,8 @@
                                 appointmentEmp ae ON a.id = ae.apptID
                             LEFT JOIN
                                 employee e ON ae.empID = e.id
+                                LEFT JOIN
+                                payment py ON py.apptID = a.id
                             GROUP BY
                                 a.id
                             ORDER BY
@@ -131,6 +136,9 @@
                                                     $appointment_date = $row['appointment_date'];
                                                     $appointment_time = "{$row['start_time']} - {$row['end_time']}";
                                                     $status = ucfirst($row['status']);
+                                                    $payment_amount = $row['payment_amount'];
+                                                    $payment_method = $row['payment_method'];
+                                                    $payment_proof_path = $row['payment_proof_path'];
 
                                                     echo "<tr class='status-{$status}'>";
                                                     echo "<td>{$counter}</td>";
@@ -164,9 +172,12 @@
 
                                                     // If status is Paid and no employee has been assigned, show Assign Employee button
                                                     elseif ($status == 'Paid' && $employee_names_display == "<span style='color: red;'>Not Assigned</span>") :
+                                                        echo "<span class='ms-2' data-bs-toggle='tooltip' title='View Proof of Payment'>
+                                                        <i class='mdi mdi-eye' style='cursor: pointer;' data-bs-toggle='modal' data-bs-target='#viewPayment{$modal_id}'></i>
+                                                    <br/></span>";
                                                         echo "
         <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#assignEmployee{$modal_id}'>
-            Assign Employee
+            Assign Task
         </button>
     ";
 
@@ -187,6 +198,44 @@
 
                                                     echo "</td>";
                                                     echo "</tr>";
+                                                    // Payment proof modal
+                                                    echo "
+                                                    <div id='viewPayment{$modal_id}' class='modal fade' tabindex='-1' aria-labelledby='viewPaymentLabel{$modal_id}' aria-hidden='true'>
+                                                        <div class='modal-dialog modal-dialog-centered' role='document'>
+                                                            <div class='modal-content'>
+                                                                <div class='modal-header'>
+                                                                    <h5 class='modal-title' id='viewPaymentLabel{$modal_id}'>Payment Information for Appointment ID #{$appointment_id}</h5>
+                                                                    <button type='button' class='btn-close' data-bs-dismiss='modal'></button>
+                                                                </div>
+                                                                <div class='modal-body'>
+                                                                    <p><strong>Price:</strong> RM{$payment_amount}</p>
+                                                                    <p><strong>Payment Method:</strong> {$payment_method}</p>
+                                                                    ";
+
+                                                    if ($payment_proof_path) {
+                                                        $is_pdf = pathinfo($payment_proof_path, PATHINFO_EXTENSION) === 'pdf';
+
+                                                        if ($is_pdf) {
+                                                            echo "
+                                                            <p><strong>Proof of Payment (PDF):</strong></p>
+                                                            <iframe src='{$payment_proof_path}' style='width:100%; height:400px;' frameborder='0'></iframe>
+                                                        ";
+                                                        } else {
+                                                            echo "
+                                                            <p><strong>Proof of Payment (Image):</strong></p>
+                                                            <img src='{$payment_proof_path}' alt='Proof of Payment' style='max-width:100%; height:auto;'>
+                                                        ";
+                                                        }
+                                                    } else {
+                                                        echo "<p>No proof of payment provided or cash payment.</p>";
+                                                    }
+
+                                                    echo "
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ";
 
                                                     // Modal for assigning employees
                                                     echo "
