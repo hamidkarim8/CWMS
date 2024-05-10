@@ -51,6 +51,7 @@
                                                 <th scope="col">Name</th>
                                                 <th scope="col">Location</th>
                                                 <th scope="col">Phone Number</th>
+                                                <th scope="col">Availability</th>
                                                 <th scope="col" class="text-center">Action</th>
                                             </tr>
                                         </thead>
@@ -66,12 +67,16 @@
                                                     $id = $row['id'];
                                                     $location = isset($row['location']) ? $row['location'] : 'No location';
                                                     $phone = $row['phone'];
+                                                    $open = $row['isOpen'];
+                                                    $is_open_text = $open ? "Open" : "Close";
+
                                                     echo "
                                                     <tr>
                                                     <th scope='row'>$modal</th>
                                                     <td>$name</td>
                                                     <td>$location</td>
                                                     <td>$phone</td>
+                                                    <td>$is_open_text</td>
                                                     <td >
                                                         <center>
                                                             <button type='button' class='btn btn-primary btn-animation waves-effect waves-light data-text='Update' data-bs-toggle='modal' data-bs-target='#view2$modal'>
@@ -111,6 +116,14 @@
                                                                             <label for='inputEmail4' class='form-label'>Phone Number</label>
                                                                             <input type='number' class='form-control' name='phone' value='$phone' required>
                                                                         </div>
+                                                                        <div class='col-md-12 mt-4'>
+                                                                        <label for='isOpen' class='form-label'>Open this branch?</label>
+                                                                        <input type='checkbox' id='isOpen' name='isOpen' value='1' ";
+                                                    if ($open == 1) {
+                                                        echo "checked";
+                                                    }
+                                                    echo ">
+                                                                    </div>
                                                                         
                                                                         <input type='hidden' value='$id' name='id' />
                                                                     </div>

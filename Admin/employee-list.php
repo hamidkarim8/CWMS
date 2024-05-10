@@ -52,6 +52,7 @@
                                                 <th scope="col">Email</th>
                                                 <th scope="col">Position</th>
                                                 <th scope="col">Branch</th>
+                                                <th scope="col">Availability</th>
                                                 <th scope="col" class="text-center">Action</th>
                                             </tr>
                                         </thead>
@@ -64,6 +65,7 @@
                     employee.name,
                     employee.email,
                     employee.position,
+                    employee.isAvailable,
                     branch.name AS branch_name,
                     employee.branchID
                   FROM branch
@@ -80,7 +82,8 @@
                                                     $position = $row['position'];
                                                     $branch_name = isset($row['branch_name']) ? $row['branch_name'] : 'No Branch Assigned';
                                                     $branch_id = isset($row['branchID']) ? $row['branchID'] : null;
-
+                                                    $available = $row['isAvailable'];
+                                                    $is_available_text = $available ? "Available" : "Unavailable";
                                                     echo "
         <tr>
             <th scope='row'>$modal</th>
@@ -88,6 +91,7 @@
             <td>$email</td>
             <td>$position</td>
             <td>$branch_name</td>
+            <td>$is_available_text</td>
             <td>
                 <center>
                     <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#view2$modal'>
@@ -143,6 +147,14 @@
 
                                                     echo "</select>
                             </div>
+                            <div class='mb-3'>
+                            <label for='isAvailable' class='form-label'>Make this employee available?</label>
+                            <input type='checkbox' id='isAvailable' name='isAvailable' value='1' ";
+        if ($available == 1) {
+            echo "checked";
+        }
+        echo ">
+                        </div>
                             <input type='hidden' value='$id' name='id' />
                         </div>
                         <div class='modal-footer'>

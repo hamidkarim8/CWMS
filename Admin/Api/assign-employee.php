@@ -50,6 +50,17 @@ if ($appointment_id && !empty($employee_ids)) {
         $stmt->bind_param('iiss', $appointment_id, $emp_id, $appointment_date, $appointment_time);
         $stmt->execute();
         $stmt->close();
+
+        // Set employee as unavailable
+        $updateEmployeeAvailabilityQuery = "
+            UPDATE employee
+            SET isAvailable = 0
+            WHERE id = ?
+        ";
+        $updateStmt = $conn->prepare($updateEmployeeAvailabilityQuery);
+        $updateStmt->bind_param('i', $emp_id);
+        $updateStmt->execute();
+        $updateStmt->close();
     }
 
     echo "

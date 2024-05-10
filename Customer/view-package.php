@@ -194,7 +194,7 @@
                                                     <label class='form-label'>Select Branch</label>
                                                     <select class='form-control' name='branchID' required>";
 
-                                                $branch_query = "SELECT id, name FROM branch;";
+                                                $branch_query = "SELECT id, name FROM branch where isOpen = 1;";
 
                                                 $branch_result = $conn->query($branch_query);
 

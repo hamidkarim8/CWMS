@@ -15,9 +15,10 @@ $email = $_POST["email"];
 $position = $_POST["position"];
 $branch = $_POST["branch"];
 $id = $_POST["id"];
+$isAvailable = isset($_POST["isAvailable"]) ? 1 : 0;
 
 
-$sql = "UPDATE employee SET name='$name', email='$email',position='$position', branchID='$branch'
+$sql = "UPDATE employee SET name='$name', email='$email',position='$position', branchID='$branch', isAvailable='$isAvailable'
             WHERE id='$id'";
 
 if ($conn->query($sql) === TRUE){

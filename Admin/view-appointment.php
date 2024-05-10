@@ -227,7 +227,7 @@
                                                         ";
                                                         }
                                                     } else {
-                                                        echo "<p>No proof of payment provided or cash payment.</p>";
+                                                        echo "<p>Payment made by cash at the counter.</p>";
                                                     }
 
                                                     echo "
@@ -259,7 +259,7 @@
                                                         FROM 
                                                             employee 
                                                         WHERE 
-                                                            branchID = ?
+                                                            branchID = ? AND isAvailable = 1
                                                     ";
                                                     $emp_stmt = $conn->prepare($emp_query);
                                                     $emp_stmt->bind_param('i', $row['branch_id']);
