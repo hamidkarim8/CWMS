@@ -54,12 +54,30 @@
             background-color: #2196F3;
         }
 
-        .status-rejected {
+        .status-declined {
             background-color: #f44336;
+        }
+        .status-paid {
+            background-color: #9c27b0;
         }
 
         .alert {
             border-radius: 10px;
+        }
+
+        .underline {
+            text-decoration: underline;
+        }
+
+        .payment-info {
+            background-color: #f5f5f5;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .modal-content {
+            border-radius: 15px;
         }
     </style>
 </head>
@@ -114,7 +132,8 @@
         b.name AS branch_name,
         v.plateNo AS vehicle_plate,
         v.model AS vehicle_model,
-        v.color AS vehicle_color
+        v.color AS vehicle_color,
+        wp.price AS package_price
     FROM 
         appointment a
     JOIN 
@@ -138,7 +157,7 @@
 
                     ?>
 
-                    <!-- start content -->
+                    <!-- Start content -->
                     <div class="card-header">
                         <div class="card">
                             <div class="card-body">
@@ -158,26 +177,73 @@
                                                             <p><strong>Date:</strong> <?php echo $row['appointment_date']; ?></p>
                                                             <p><strong>Time:</strong> <?php echo $row['start_time']; ?> - <?php echo $row['end_time']; ?></p>
                                                             <p><strong>Vehicle:</strong> <?php echo $row['vehicle_plate']; ?> (<?php echo $row['vehicle_model']; ?> - <?php echo $row['vehicle_color']; ?>)</p>
+                                                            <p><strong>Price:</strong> RM<?php echo $row['package_price']; ?></p>
                                                             <div class="text-center">
                                                                 <span class="appointment-status <?php echo 'status-' . strtolower($row['status']); ?>">
                                                                     <?php echo ucfirst($row['status']); ?>
                                                                 </span>
+                                                                <?php if ($row['status'] === 'Accepted') : ?>
+                                                                    <a href="#" style="text-decoration: underline" data-bs-toggle="modal" data-bs-target="#paymentModal<?php echo $row['appointment_id']; ?>" class="d-block mt-2">
+                                                                        Make Payment
+                                                                    </a>
+                                                                <?php endif; ?>
                                                             </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Modal for Payment -->
+                                                <div id="paymentModal<?php echo $row['appointment_id']; ?>" class="modal fade" tabindex="-1" aria-labelledby="paymentModalLabel<?php echo $row['appointment_id']; ?>" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="paymentModalLabel<?php echo $row['appointment_id']; ?>">
+                                                                    Make Payment for Appointment ID #<?php echo $row['appointment_id']; ?>
+                                                                </h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                            </div>
+                                                            <form method="post" action="Api/make-payment.php" enctype="multipart/form-data">
+                                                                <input type="hidden" name="appointment_id" value="<?php echo $row['appointment_id']; ?>">
+
+                                                                <div class="modal-body">
+                                                                    <div class="payment-info">
+                                                                        <p><strong>Price:</strong> RM<?php echo $row['package_price']; ?></p>
+                                                                        <label for="paymentMethod">Payment Method:</label>
+                                                                        <select class="form-select" name="paymentMethod" id="paymentMethod<?php echo $row['appointment_id']; ?>" onchange="togglePaymentDetails(<?php echo $row['appointment_id']; ?>)">
+                                                                            <option value="cash">Cash</option>
+                                                                            <option value="online" selected>Online Payment</option>
+                                                                        </select>
+
+                                                                        <div id="onlinePaymentDetails<?php echo $row['appointment_id']; ?>" style="display: block;">
+                                                                            <p class="mt-4"><strong>Bank Account Information:</strong> 123456789 (XYZ Bank)</p>
+                                                                            <img class="mb-4" src="../QR-code2.jpg" alt="QR Code" width="200" />
+                                                                            <label for="paymentProof">Upload Proof of Payment (PDF/JPG/PNG):</label>
+                                                                            <input type="file" class="form-control" name="paymentProof" accept=".pdf,.jpg,.jpeg,.png" />
+                                                                        </div>
+
+                                                                        <div id="cashPaymentInfo<?php echo $row['appointment_id']; ?>" style="display: none;">
+                                                                            <p class="mt-4">Make payment at the counter on <?php echo $row['appointment_date']; ?> at <?php echo $row['start_time']; ?>.</p>
+                                                                            <p>Show your appointment ID to complete the payment.</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="submit" class="btn btn-primary">Confirm</button>
+                                                                </div>
+                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>
                                             <?php endwhile; ?>
                                         </div>
                                     <?php else : ?>
-                                        <div class="alert alert-warning text-center">
-                                            No appointments found.
-                                        </div>
+                                        <div class="alert alert-warning text-center">No appointments found.</div>
                                     <?php endif; ?>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- end content -->
+                    <!-- End content -->
 
 
                 </div>
@@ -871,6 +937,21 @@
     </div>
 
     <?php include 'Component/javascript.php' ?>
+    <script>
+        function togglePaymentDetails(appointmentId) {
+            const paymentMethod = document.getElementById(`paymentMethod${appointmentId}`).value;
+            const onlinePaymentDetails = document.getElementById(`onlinePaymentDetails${appointmentId}`);
+            const cashPaymentInfo = document.getElementById(`cashPaymentInfo${appointmentId}`);
+
+            if (paymentMethod === "online") {
+                onlinePaymentDetails.style.display = "block";
+                cashPaymentInfo.style.display = "none";
+            } else {
+                onlinePaymentDetails.style.display = "none";
+                cashPaymentInfo.style.display = "block";
+            }
+        }
+    </script>
 </body>
 
 </html>
