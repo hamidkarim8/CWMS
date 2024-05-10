@@ -14,21 +14,65 @@ $appointment_id = $_GET['id'] ?? null;
 
 if ($appointment_id) {
     $query = "
-        UPDATE appointment 
-        SET status = 'Accepted'
-        WHERE id = ?
+        SELECT a.custID, a.date AS appointment_date, a.start_time, wp.price AS package_price 
+        FROM appointment a
+        JOIN washPackage wp ON a.washPackID = wp.id
+        WHERE a.id = ?
     ";
-
     $stmt = $conn->prepare($query);
     $stmt->bind_param('i', $appointment_id);
     $stmt->execute();
+    $stmt->bind_result($custID, $appointment_date, $appointment_time, $package_price);
+    $stmt->fetch();
     $stmt->close();
 
-    echo "
-    <script type='text/javascript'>
-        alert('Appointment accepted successfully.');
-        window.location.href ='../view-appointment.php';
-    </script>";
+    if ($custID) {
+        // Check if the customer is a walk-in (userID 99)
+        $query = "
+            SELECT userID 
+            FROM customer 
+            WHERE id = ?
+        ";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param('i', $custID);
+        $stmt->execute();
+        $stmt->bind_result($userID);
+        $stmt->fetch();
+        $stmt->close();
+
+        if ($userID == 99) {
+            $status = 'Paid';
+            $query = "
+                INSERT INTO payment (apptID, date, time, amount, paymentMethod)
+                VALUES (?, ?, ?, ?, 'cash')
+            ";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param('issd', $appointment_id, $appointment_date, $appointment_time, $package_price);
+            $stmt->execute();
+            $stmt->close();
+
+            $message = 'Appointment marked as Paid (Walk-In).';
+        } else {
+            $status = 'Accepted';
+            $message = 'Appointment accepted successfully.';
+        }
+
+        $query = "
+            UPDATE appointment 
+            SET status = ?
+            WHERE id = ?
+        ";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param('si', $status, $appointment_id);
+        $stmt->execute();
+        $stmt->close();
+
+        echo "
+        <script type='text/javascript'>
+            alert('$message');
+            window.location.href ='../view-appointment.php';
+        </script>";
+    }
 } else {
     echo "
     <script type='text/javascript'>
@@ -36,4 +80,3 @@ if ($appointment_id) {
         window.location.href ='../view-appointment.php';
     </script>";
 }
-?>

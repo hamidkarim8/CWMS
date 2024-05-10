@@ -42,6 +42,9 @@
                             <div class="card-body">
                                 <!-- Dropdown to filter by status -->
                                 <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <button type="button" class="btn btn-success btn-animation waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#walkInModal">
+                                        Book Walk-In
+                                    </button>
                                     <div style="width: 200px;">
                                         <select class="form-select" id="statusFilter" onchange="filterByStatus()">
                                             <option value="All">All</option>
@@ -63,6 +66,7 @@
                                                 <th scope="col">Branch</th>
                                                 <th scope="col">Employee</th>
                                                 <th scope="col">Vehicle</th>
+                                                <!-- <th scope="col">Appointment ID</th> -->
                                                 <th scope="col">Date</th>
                                                 <th scope="col">Time</th>
                                                 <th scope="col" class="text-center">Action</th>
@@ -129,6 +133,8 @@
                                                     $appointment_id = $row['appointment_id'];
                                                     $package_name = $row['package_name'];
                                                     $customer_name = $row['customer_name'];
+                                                    $customer_id = $row['customer_id'];
+                                                    $customer_names_display = $customer_id == 99 ? "<span style='color: blue;'>$customer_name</span>" : $customer_name;
                                                     $branch_name = $row['branch_name'];
                                                     $employee_names = $row['employee_names'] ?: 'Not Assigned';
                                                     $employee_names_display = $employee_names == 'Not Assigned' ? "<span style='color: red;'>$employee_names</span>" : $employee_names;
@@ -143,15 +149,15 @@
                                                     echo "<tr class='status-{$status}'>";
                                                     echo "<td>{$counter}</td>";
                                                     echo "<td>{$package_name}</td>";
-                                                    echo "<td>{$customer_name}</td>";
+                                                    echo "<td>{$customer_names_display}</td>";
                                                     echo "<td>{$branch_name}</td>";
                                                     echo "<td>{$employee_names_display}</td>";
                                                     echo "<td>{$vehicle_details}</td>";
+                                                    // echo "<td>{$appointment_id}</td>";
                                                     echo "<td>{$appointment_date}</td>";
                                                     echo "<td>{$appointment_time}</td>";
                                                     echo "<td class='text-center'>";
 
-                                                    // Show Accept and Decline buttons when status is Pending
                                                     if ($status == 'Pending') :
                                                         echo "
         <a href='./Api/accept-appointment.php?id=$appointment_id' class='btn btn-success btn-animation waves-effect waves-light'>
@@ -310,6 +316,81 @@
                             </div>
                         </div>
                     </div>
+                    <div id="walkInModal" class="modal fade" tabindex="-1" aria-labelledby="walkInModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="walkInModalLabel">Book Walk-In Appointment</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form method="post" action="Api/book-package.php">
+                                    <div class="modal-body">
+                                        <!-- Dropdown to select a package -->
+                                        <div class="mb-3">
+                                            <label class="form-label">Select Package</label>
+                                            <select class="form-control" name="washPackID" required>
+                                                <!-- Fetch packages to populate the dropdown -->
+                                                <?php
+                                                include('../dbConnect.php');
+                                                $package_query = "SELECT id, name FROM washPackage;";
+                                                $package_result = $conn->query($package_query);
+                                                while ($package_row = $package_result->fetch_assoc()) {
+                                                    echo "<option value='{$package_row['id']}'>{$package_row['name']}</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+
+                                        <!-- Select branch -->
+                                        <div class="mb-3">
+                                            <label class="form-label">Select Branch</label>
+                                            <select class="form-control" name="branchID" required>
+                                                <!-- Fetch branches to populate the dropdown -->
+                                                <?php
+                                                $branch_query = "SELECT id, name FROM branch WHERE isOpen = 1;";
+                                                $branch_result = $conn->query($branch_query);
+                                                while ($branch_row = $branch_result->fetch_assoc()) {
+                                                    echo "<option value='{$branch_row['id']}'>{$branch_row['name']}</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+
+                                        <!-- Additional fields for booking -->
+                                        <div class="mb-3">
+                                            <label class="form-label">Select Date</label>
+                                            <input type="date" class="form-control" name="appointmentDate" required />
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Select Time</label>
+                                            <input type="time" class="form-control" name="appointmentTime" required min='08:00' max='17:00' step='1800' />
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Vehicle Plate Number</label>
+                                            <input type="text" class="form-control" name="plateNo" required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Vehicle Model</label>
+                                            <input type="text" class="form-control" name="model" required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Vehicle Color</label>
+                                            <input type="text" class="form-control" name="color" required />
+                                        </div>
+
+                                        <!-- Hidden field to set customer ID to walk-in (99) -->
+                                        <input type="hidden" name="custID" value="99" />
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-primary" type="submit">Confirm</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- end content -->
                 </div>
                 <!-- container-fluid -->
