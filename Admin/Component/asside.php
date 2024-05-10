@@ -43,12 +43,12 @@
                 </li> <!-- end Dashboard Menu -->
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#">
+                    <a class="nav-link menu-link" href="view-appointment.php">
                         <i class="mdi mdi-calendar-check"></i> <span data-key="t-authentication">Booking Appointment</span>
                     </a>
-                    <a class="nav-link menu-link" href="#">
+                    <!-- <a class="nav-link menu-link" href="#">
                         <i class="mdi mdi-check-circle-outline"></i> <span data-key="t-authentication">Assign Task</span>
-                    </a>
+                    </a> -->
                     <a class="nav-link menu-link" href="#">
                         <i class="mdi mdi-comment-outline"></i> <span data-key="t-authentication">Feedback</span>
                     </a>
