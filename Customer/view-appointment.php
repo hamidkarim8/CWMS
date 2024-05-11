@@ -187,12 +187,12 @@
                                                                     <?php echo ucfirst($row['status']); ?>
                                                                 </span>
                                                                 <?php if ($row['status'] === 'Accepted') : ?>
-                                                                    <a href="#" style="text-decoration: underline" data-bs-toggle="modal" data-bs-target="#paymentModal<?php echo $row['appointment_id']; ?>" class="d-block mt-2">
+                                                                    <a href="#" style="text-decoration: underline !important; color: blue !important;" data-bs-toggle="modal" data-bs-target="#paymentModal<?php echo $row['appointment_id']; ?>" class="d-block mt-2">
                                                                         Make Payment
                                                                     </a>
                                                                 <?php endif; ?>
                                                                 <?php if ($row['status'] === 'Completed' && !$row['feedback_id']) : ?>
-                                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#feedbackModal<?php echo $row['appointment_id']; ?>" class="d-block mt-2">
+                                                                    <a href="#" style="text-decoration: underline !important; color: blue !important ;" data-bs-toggle="modal" data-bs-target="#feedbackModal<?php echo $row['appointment_id']; ?>" class="d-block mt-2">
                                                                         Give Feedback
                                                                     </a>
                                                                 <?php endif; ?>
