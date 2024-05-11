@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 09, 2024 at 10:50 AM
+-- Generation Time: May 11, 2024 at 09:04 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -32,10 +32,10 @@ CREATE TABLE `appointment` (
   `custID` int(50) NOT NULL,
   `vehicleID` int(50) NOT NULL,
   `washPackID` int(50) NOT NULL,
-  `empID` int(50) NOT NULL,
   `branchID` int(50) NOT NULL,
   `date` date NOT NULL,
-  `time` time(6) NOT NULL,
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL,
   `status` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -49,7 +49,8 @@ CREATE TABLE `appointmentemp` (
   `id` int(50) NOT NULL,
   `apptID` int(50) NOT NULL,
   `empID` int(50) NOT NULL,
-  `scheduleTime` datetime(6) NOT NULL
+  `date` date NOT NULL,
+  `time` time NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -62,16 +63,17 @@ CREATE TABLE `branch` (
   `id` int(50) NOT NULL,
   `name` varchar(255) NOT NULL,
   `location` varchar(255) NOT NULL,
-  `phone` varchar(50) NOT NULL
+  `phone` varchar(50) NOT NULL,
+  `isOpen` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `branch`
 --
 
-INSERT INTO `branch` (`id`, `name`, `location`, `phone`) VALUES
-(1, 'BRANCH A', 'MELAKA, MALAYSIA', '0129384756'),
-(2, 'BRANCH B', 'MELAKA, MALAYSIA', '013464756');
+INSERT INTO `branch` (`id`, `name`, `location`, `phone`, `isOpen`) VALUES
+(1, 'JASIN', 'MELAKA, MALAYSIA', '0129384756', 1),
+(2, 'ALOR GAJAH', 'MELAKA, MALAYSIA', '013464756', 1);
 
 -- --------------------------------------------------------
 
@@ -82,7 +84,7 @@ INSERT INTO `branch` (`id`, `name`, `location`, `phone`) VALUES
 CREATE TABLE `customer` (
   `id` int(50) NOT NULL,
   `userID` int(50) NOT NULL,
-  `apptDate` datetime(6) NOT NULL
+  `apptID` int(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -97,17 +99,17 @@ CREATE TABLE `employee` (
   `email` varchar(50) NOT NULL,
   `position` varchar(50) NOT NULL,
   `branchID` int(50) NOT NULL,
-  `apptID` int(50) NOT NULL
+  `isAvailable` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `employee`
 --
 
-INSERT INTO `employee` (`id`, `name`, `email`, `position`, `branchID`, `apptID`) VALUES
-(1, 'TEST', 'test@gmail.com', 'manager', 2, 0),
-(2, 'TEST2', 'test2@gmail.com', 'junior', 1, 0),
-(4, 'RASID', 'rasid@gmail.com', 'staff1', 1, 0);
+INSERT INTO `employee` (`id`, `name`, `email`, `position`, `branchID`, `isAvailable`) VALUES
+(1, 'ABU', 'test@gmail.com', 'Supervisor', 2, 1),
+(2, 'AHMAD', 'test2@gmail.com', 'Staff Assistant', 1, 1),
+(4, 'RASID', 'rasid@gmail.com', 'Polish Man', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -116,8 +118,9 @@ INSERT INTO `employee` (`id`, `name`, `email`, `position`, `branchID`, `apptID`)
 --
 
 CREATE TABLE `feedback` (
-  `id` int(50) DEFAULT NULL,
+  `id` int(50) NOT NULL,
   `rate` int(10) NOT NULL,
+  `comment` varchar(255) NOT NULL,
   `custID` int(50) NOT NULL,
   `apptID` int(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -129,11 +132,13 @@ CREATE TABLE `feedback` (
 --
 
 CREATE TABLE `payment` (
-  `id` int(50) DEFAULT NULL,
+  `id` int(50) NOT NULL,
   `apptID` int(50) NOT NULL,
-  `dateTime` datetime(6) NOT NULL,
+  `date` date NOT NULL,
+  `time` time NOT NULL,
   `amount` int(255) NOT NULL,
-  `paymentMethod` varchar(255) NOT NULL
+  `paymentMethod` varchar(255) NOT NULL,
+  `paymentProofPath` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -155,12 +160,14 @@ CREATE TABLE `profile` (
 --
 
 INSERT INTO `profile` (`id`, `user_id`, `fullname`, `phone`, `email`) VALUES
-(2, 4, 'admin', '12344', 'test@gmail.com'),
-(8, 11, 'Dizz121', '0139381521121', 'test1@gmail.com'),
-(9, 12, 'UI', '12381092830', ''),
+(2, 1, 'admin', '12344', 'test@gmail.com'),
+(8, 11, 'Customer1', '0139381521121', 'test1@gmail.com'),
+(9, 12, 'Customer2', '12381092830', 'email@testsaje.com'),
 (10, 13, 'testing full', NULL, ''),
 (11, 15, 'akauntest', '01298782834', ''),
-(12, 16, 'dsgr', '4', '');
+(12, 16, 'dsgr', '4', ''),
+(13, 17, 'razakthegoat', '01192983744', 'razak@gmail.com'),
+(99, 99, 'Walk-in Customer', '0', 'walkincustomer@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -180,13 +187,15 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `username`, `password`, `role`) VALUES
-(4, 'admin', 'admin', 'Admin'),
+(1, 'admin', 'admin', 'Admin'),
 (11, 'test1', 'cust1', 'Customer'),
 (12, 'test2', 'cust2', 'Customer'),
 (13, 'test', 'test', 'Customer'),
 (14, 'test', 'test', 'Customer'),
 (15, 'test3', 'test', 'Customer'),
-(16, 'gdrgdg', 'drg', 'Customer');
+(16, 'gdrgdg', 'drg', 'Customer'),
+(17, 'Razak', 'razak123', 'Customer'),
+(99, 'walkinCustomer', 'customer', 'Customer');
 
 -- --------------------------------------------------------
 
@@ -261,6 +270,18 @@ ALTER TABLE `employee`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `feedback`
+--
+ALTER TABLE `feedback`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `payment`
+--
+ALTER TABLE `payment`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `profile`
 --
 ALTER TABLE `profile`
@@ -316,19 +337,31 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `employee`
 --
 ALTER TABLE `employee`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `feedback`
+--
+ALTER TABLE `feedback`
+  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `payment`
+--
+ALTER TABLE `payment`
+  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `profile`
 --
 ALTER TABLE `profile`
-  MODIFY `id` int(25) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(25) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(250) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(250) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 
 --
 -- AUTO_INCREMENT for table `vehicle`
