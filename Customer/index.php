@@ -156,9 +156,9 @@
                                         </div>
                                     </div>
 
-                                    <div style="padding-left:515px;">
-                                    <button class="carousel-control" onclick="previousSlide()">&#9664;</button>
-                                    <button class="carousel-control" onclick="nextSlide()">&#9654;</button>
+                                    <div style="text-align: center; padding-top: 20px;">
+                                        <button class="carousel-control" onclick="previousSlide()" style="margin-right: 10px;">&#9664;</button>
+                                        <button class="carousel-control" onclick="nextSlide()" style="margin-left: 10px;">&#9654;</button>
                                     </div>
 
                                 </div>

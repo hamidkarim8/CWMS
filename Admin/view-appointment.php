@@ -75,7 +75,23 @@
                                         <tbody>
                                             <?php
                                             include('../dbConnect.php');
+                                            // Define how many results you want per page
+                                            $results_per_page = 10;
 
+                                            // Determine the total number of rows in the result set
+                                            $total_results_query = "SELECT COUNT(*) AS total FROM appointment";
+                                            $total_results_result = $conn->query($total_results_query);
+                                            $total_results_row = $total_results_result->fetch_assoc();
+                                            $total_results = $total_results_row['total'];
+
+                                            // Determine the total number of pages
+                                            $total_pages = ceil($total_results / $results_per_page);
+
+                                            // Determine the current page number, or set it to 1 if it's not set
+                                            $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
+
+                                            // Calculate the SQL LIMIT starting number for the results on the displaying page
+                                            $offset = ($current_page - 1) * $results_per_page;
                                             $query = "
                             SELECT
                                 a.id AS appointment_id,
@@ -120,6 +136,7 @@
                                 a.id
                             ORDER BY
                                 a.date, a.start_time
+                                LIMIT $offset, $results_per_page
                         ";
 
                                             $stmt = $conn->prepare($query);
@@ -312,6 +329,16 @@
                                             ?>
                                         </tbody>
                                     </table>
+                                    <!-- Pagination Links -->
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination justify-content-center mt-4">
+                                            <?php for ($page = 1; $page <= $total_pages; $page++) : ?>
+                                                <li class="page-item <?php echo ($current_page == $page) ? 'active' : ''; ?>">
+                                                    <a class="page-link" href="?page=<?php echo $page; ?>"><?php echo $page; ?></a>
+                                                </li>
+                                            <?php endfor; ?>
+                                        </ul>
+                                    </nav>
                                 </div>
                             </div>
                         </div>
