@@ -77,6 +77,11 @@
             text-align: center;
         }
 
+        .payment-info p,
+        .payment-info label {
+            color: #000 !important;
+        }
+
         .modal-content {
             border-radius: 15px;
         }
