@@ -324,7 +324,7 @@
                                                     $counter++;
                                                 endwhile;
                                             else :
-                                                echo "<tr><td colspan='9' class='text-center'>No appointments found.</td></tr>";
+                                                echo "<tr><td colspan='9' class='text-center text-danger'>No appointments found.</td></tr>";
                                             endif;
                                             ?>
                                         </tbody>
