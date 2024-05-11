@@ -76,7 +76,7 @@
                                             <?php
                                             include('../dbConnect.php');
                                             // Define how many results you want per page
-                                            $results_per_page = 10;
+                                            $results_per_page = 12;
 
                                             // Determine the total number of rows in the result set
                                             $total_results_query = "SELECT COUNT(*) AS total FROM appointment";
