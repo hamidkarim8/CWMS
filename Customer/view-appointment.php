@@ -231,7 +231,7 @@
                                                                         <div id="onlinePaymentDetails<?php echo $row['appointment_id']; ?>" style="display: block;">
                                                                             <p class="mt-4"><strong>Bank Account Information:</strong> 123456789 (XYZ Bank)</p>
                                                                             <img class="mb-4" src="../QR-code2.jpg" alt="QR Code" width="200" />
-                                                                            <label for="paymentProof">Upload Proof of Payment (PDF/JPG/PNG):</label>
+                                                                            <label for="paymentProof">Upload Proof of Payment (PDF/JPG/JPEG/PNG):</label>
                                                                             <input type="file" class="form-control" name="paymentProof" accept=".pdf,.jpg,.jpeg,.png" />
                                                                         </div>
 
