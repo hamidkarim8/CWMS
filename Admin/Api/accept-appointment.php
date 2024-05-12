@@ -40,7 +40,7 @@ if ($appointment_id) {
         $stmt->fetch();
         $stmt->close();
 
-        if ($userID == 99) {
+        if ($userID == 2) {//walkin only
             $status = 'Paid';
             $query = "
                 INSERT INTO payment (apptID, date, time, amount, paymentMethod)

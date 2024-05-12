@@ -407,8 +407,8 @@
                                             <input type="text" class="form-control" name="color" required />
                                         </div>
 
-                                        <!-- Hidden field to set customer ID to walk-in (99) -->
-                                        <input type="hidden" name="custID" value="99" />
+                                        <!-- Hidden field to set customer ID to walk-in (2) -->
+                                        <input type="hidden" name="custID" value="2" />
                                     </div>
                                     <div class="modal-footer">
                                         <button class="btn btn-primary" type="submit">Confirm</button>
