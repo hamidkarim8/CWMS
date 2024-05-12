@@ -223,42 +223,42 @@
                                                     echo "</tr>";
                                                     // Payment proof modal
                                                     echo "
-                                                    <div id='viewPayment{$modal_id}' class='modal fade' tabindex='-1' aria-labelledby='viewPaymentLabel{$modal_id}' aria-hidden='true'>
-                                                        <div class='modal-dialog modal-dialog-centered' role='document'>
-                                                            <div class='modal-content'>
-                                                                <div class='modal-header'>
-                                                                    <h5 class='modal-title' id='viewPaymentLabel{$modal_id}'>Payment Information for Appointment ID #{$appointment_id}</h5>
-                                                                    <button type='button' class='btn-close' data-bs-dismiss='modal'></button>
-                                                                </div>
-                                                                <div class='modal-body'>
-                                                                    <p><strong>Price:</strong> RM{$payment_amount}</p>
-                                                                    <p><strong>Payment Method:</strong> {$payment_method}</p>
-                                                                    ";
+<div id='viewPayment{$modal_id}' class='modal fade' tabindex='-1' aria-labelledby='viewPaymentLabel{$modal_id}' aria-hidden='true'>
+    <div class='modal-dialog modal-dialog-centered' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title' id='viewPaymentLabel{$modal_id}'>Payment Information for Appointment ID #{$appointment_id}</h5>
+                <button type='button' class='btn-close' data-bs-dismiss='modal'></button>
+            </div>
+            <div class='modal-body'>
+                <p><strong>Price:</strong> RM{$payment_amount}</p>
+                <p><strong>Payment Method:</strong> {$payment_method}</p>
+";
 
                                                     if ($payment_proof_path) {
                                                         $is_pdf = pathinfo($payment_proof_path, PATHINFO_EXTENSION) === 'pdf';
 
                                                         if ($is_pdf) {
                                                             echo "
-                                                            <p><strong>Proof of Payment (PDF):</strong></p>
-                                                            <iframe src='{$payment_proof_path}' style='width:100%; height:400px;' frameborder='0'></iframe>
-                                                        ";
+        <p><strong>Proof of Payment (PDF):</strong></p>
+        <iframe src='" . substr($payment_proof_path, 1) . "' style='width:100%; height:400px;' frameborder='0'></iframe>
+    ";
                                                         } else {
                                                             echo "
-                                                            <p><strong>Proof of Payment (Image):</strong></p>
-                                                            <img src='{$payment_proof_path}' alt='Proof of Payment' style='max-width:100%; height:auto;'>
-                                                        ";
+        <p><strong>Proof of Payment (Image):</strong></p>
+        <img src='" . substr($payment_proof_path, 1) . "' alt='Proof of Payment' style='max-width:100%; height:auto;'>
+    ";
                                                         }
                                                     } else {
                                                         echo "<p>Payment made by cash at the counter.</p>";
                                                     }
 
                                                     echo "
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                ";
+            </div>
+        </div>
+    </div>
+</div>
+";
 
                                                     // Modal for assigning employees
                                                     echo "

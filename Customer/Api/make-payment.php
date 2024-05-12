@@ -56,7 +56,7 @@ if ($paymentMethod === 'online') {
             exit;
         }
 
-        $uploadDir = '../uploads/paymentProofs/';
+        $uploadDir = '../../uploads/paymentProofs/';
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0777, true);
         }
