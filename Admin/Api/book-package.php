@@ -39,13 +39,13 @@ $checkConflictQuery = "
         AND date = ? 
         AND (
             (start_time BETWEEN ? AND ?) 
-            OR (? BETWEEN start_time AND ?)
+            OR (? BETWEEN start_time AND end_time)
         )
         AND status IN ('Pending', 'Accepted', 'Paid')
 ";
 
 $stmt = $conn->prepare($checkConflictQuery);
-$stmt->bind_param('isssss', $branchID, $appointmentDate, $appointmentStart, $appointmentEnd, $appointmentStart, $appointmentEnd);
+$stmt->bind_param('issss', $branchID, $appointmentDate, $appointmentStart, $appointmentEnd, $appointmentStart);
 $stmt->execute();
 $result = $stmt->get_result();
 
