@@ -13,7 +13,6 @@ include_once("../../dbConnect.php");
 $appointment_id = $_GET['id'] ?? null;
 
 if ($appointment_id) {
-    // Mark the appointment as completed
     $query = "
         UPDATE appointment 
         SET status = 'Completed'
@@ -24,7 +23,6 @@ if ($appointment_id) {
     $stmt->execute();
     $stmt->close();
 
-    // Get the employee IDs assigned to this appointment
     $getEmployeesQuery = "
         SELECT empID 
         FROM appointmentEmp 
@@ -35,7 +33,6 @@ if ($appointment_id) {
     $getEmployeesStmt->execute();
     $result = $getEmployeesStmt->get_result();
 
-    // Set the employees as available
     while ($row = $result->fetch_assoc()) {
         $emp_id = $row['empID'];
 

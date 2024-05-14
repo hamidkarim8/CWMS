@@ -27,7 +27,7 @@ if ($appointment_id) {
     $stmt->close();
 
     if ($custID) {
-        // Check if the customer is a walk-in (userID 99)
+        // Check if the customer is a walk-in (userID 2)
         $query = "
             SELECT userID 
             FROM customer 

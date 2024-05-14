@@ -14,7 +14,6 @@ $appointment_id = $_POST['appointment_id'] ?? null;
 $employee_ids = $_POST['employee_ids'] ?? [];
 
 if ($appointment_id && !empty($employee_ids)) {
-    // Get the appointment's date and time
     $appointmentQuery = "
         SELECT 
             date, start_time 
@@ -30,7 +29,6 @@ if ($appointment_id && !empty($employee_ids)) {
     $appointmentStmt->fetch();
     $appointmentStmt->close();
 
-    // Clear existing assignments for this appointment
     $clearQuery = "
         DELETE FROM appointmentEmp 
         WHERE apptID = ?
@@ -40,7 +38,6 @@ if ($appointment_id && !empty($employee_ids)) {
     $clearStmt->execute();
     $clearStmt->close();
 
-    // Assign selected employees to the appointment
     foreach ($employee_ids as $emp_id) {
         $insertQuery = "
             INSERT INTO appointmentEmp (apptID, empID, date, time) 
@@ -51,7 +48,6 @@ if ($appointment_id && !empty($employee_ids)) {
         $stmt->execute();
         $stmt->close();
 
-        // Set employee as unavailable
         $updateEmployeeAvailabilityQuery = "
             UPDATE employee
             SET isAvailable = 0
