@@ -1,8 +1,98 @@
-
 <!doctype html>
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
 
 <?php include 'Component/head.php' ?>
+
+<head>
+    <style>
+        .price {
+            padding: 40px 0;
+        }
+
+        .price .section-header {
+            margin-bottom: 40px;
+        }
+
+        .price-item {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: box-shadow 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .price-item:hover {
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+
+        .price-header {
+            text-align: center;
+        }
+
+        .price-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #000;
+        }
+
+        .price-header h2 {
+            font-size: 2.5rem;
+            color: #007bff;
+        }
+
+        .price-body {
+            text-align: left;
+            color: #000;
+        }
+
+        .price-body ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .price-body ul li {
+            padding: 10px 0;
+        }
+
+        .price-body ul li i {
+            color: green;
+            margin-right: 10px;
+        }
+
+        .price-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn-custom {
+            background: #007bff;
+            color: white;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .btn-custom:hover {
+            background: #0056b3;
+        }
+
+        .featured-item {
+            border: 2px solid #007bff;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+
+        .featured-item:hover {
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .price-item {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
 
 <body>
 
@@ -32,113 +122,147 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                <h4 class="mb-sm-0">Profile</h4>
+                                <h4 class="mb-sm-0">Washing Packages</h4>
                             </div>
                         </div>
                     </div>
-                    <!-- end page title -->
 
-
+                    <!-- start content -->
                     <div class="card-header">
-                        <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-bs-toggle="tab" href="#personalDetails" role="tab">
-                                    <i class="fas fa-home"></i>
-                                    User Information
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-bs-toggle="tab" href="#changePassword" role="tab">
-                                    <i class="far fa-user"></i>
-                                    Change Password
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card-body p-4">
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="personalDetails" role="tabpanel">
-                                <form action="Api/editProfile.php" method="post">
-                                    <div class="row">
-                                    <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label for="firstnameInput" class="form-label">Username</label>
-                                                <input type="text" class="form-control" name="username" disabled value='<?php echo $login_session ?>'>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label for="firstnameInput" class="form-label">Full Name</label>
-                                                <input type="text" class="form-control" name="fullname" value='<?php echo $fullname ?>'>
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label for="lastnameInput" class="form-label">Phone Number</label>
-                                                <input type="text" class="form-control" name="phone" placeholder="Enter Phone Number" value='<?php echo $phone ?>'>
-                                            </div>
-                                        </div>
-                                      
-                                        <!--end col-->
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label for="emailInput" class="form-label">Email</label>
-                                                <input type="email" class="form-control" name="email" value='<?php echo $email  ?>'>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-12">
-                                            <div class="hstack gap-2 justify-content-end">
-                                                <button type="submit" class="btn btn-primary">Update</button>
-                                            </div>
-                                        </div>
-                                        <!--end col-->
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="container">
+                                    <div class="section-header text-center mb-4 mt-2">
+                                        <h2>Choose Your Package</h2>
                                     </div>
-                                    <!--end row-->
-                                </form>
+
+                                    <div class="row justify-content-center">
+                                        <?php
+                                        include('../dbConnect.php');
+
+                                        $query = "SELECT * FROM washPackage;";
+                                        $result = $conn->query($query);
+
+                                        if ($result->num_rows > 0) {
+                                            while ($row = $result->fetch_assoc()) {
+                                                $id = $row['id'];
+                                                $name = $row['name'];
+                                                $price = number_format($row['price'], 2);
+                                                $duration = $row['duration'];
+                                                $isFeatured = $row['isFeatured'];
+
+                                                $priceItemClass = $isFeatured == 1 ? 'price-item featured-item' : 'price-item';
+
+                                                $descriptions = preg_split('/,\s*/', $row['description']);
+
+                                                echo "<div class='col-md-4'>";
+                                                echo "  <div class='$priceItemClass'>";
+                                                echo "    <div class='price-header'>";
+                                                echo "      <h3>$name</h3>";
+                                                echo "      <h2><span>RM</span><strong>$price</strong></h2>";
+                                                echo "    </div>";
+                                                echo "    <div class='price-body'>";
+                                                echo "      <ul>";
+
+                                                foreach ($descriptions as $desc) {
+                                                    echo "        <li><i class='mdi mdi-check'></i> $desc</li>";
+                                                }
+
+                                                echo "      </ul>";
+                                                echo "    </div>";
+                                                echo "    <div class='price-footer'>";
+                                                echo "      <button type='button' class='btn btn-primary btn-animation waves-effect waves-light' data-bs-toggle='modal' data-bs-target='#modalBook$id'>Book Now</button>";
+                                                echo "    </div>";
+
+                                                echo "
+                            <div id='modalBook$id' class='modal fade' tabindex='1' aria-labelledby='modalBook$id-label' aria-hidden='true'>
+                                <div class='modal-dialog'>
+                                    <div class='modal-content'>
+                                        <div class='modal-header'>
+                                            <h5 class='modal-title' id='modalBook$id-label'>Book Package Appointment</h5>
+                                            <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                        </div>
+                                        <form method='post' action='Api/book-package.php'>
+                                            <div class='modal-body'>
+                                                <div class='mb-3'>
+                                                    <label class='form-label'>Package Name</label>
+                                                    <input type='text' class='form-control' value='$name' disabled>
+                                                </div>
+                                                
+                                                <!-- Branch Selection -->
+                                                <div class='mb-3'>
+                                                    <label class='form-label'>Select Branch</label>
+                                                    <select class='form-control' name='branchID' required>";
+
+                                                $branch_query = "SELECT id, name FROM branch where isOpen = 1;";
+
+                                                $branch_result = $conn->query($branch_query);
+
+                                                if ($branch_result->num_rows > 0) {
+                                                    while ($branch_row = $branch_result->fetch_assoc()) {
+                                                        echo "<option value='{$branch_row['id']}'>{$branch_row['name']}</option>";
+                                                    }
+                                                }
+                                                echo "
+                                                    </select>
+                                                </div>
+
+                                                <!-- Time Selection -->
+                                                <div class='mb-3'>
+                                                <label class='form-label'>Select Date</label>
+                                                <input type='date' class='form-control' name='appointmentDate' required />
+                                            </div>
+                                            
+                                            <div class='mb-3'>
+                                                <label class='form-label'>Select Time</label>
+                                                <input type='time' class='form-control' name='appointmentTime' required
+                                                    min='08:00' max='17:00' 
+                                                    step='1800'
+                                                />
+                                            </div>
+
+                                                <!-- Vehicle Information -->
+                                                <div class='mb-3'>
+                                                    <label class='form-label'>Vehicle Plate Number</label>
+                                                    <input type='text' class='form-control' name='plateNo' placeholder='Enter Plate Number' required />
+                                                </div>
+                                                <div class='mb-3'>
+                                                    <label class='form-label'>Vehicle Model</label>
+                                                    <input type='text' class='form-control' name='model' placeholder='Enter Vehicle Model' required />
+                                                </div>
+                                                <div class='mb-3'>
+                                                    <label class='form-label'>Vehicle Color</label>
+                                                    <input type='text' class='form-control' name='color' placeholder='Enter Vehicle Color' required />
+                                                </div>
+
+                                                <input type='hidden' value='$id' name='washPackID' />
+                                            </div>
+                                            <div class='modal-footer'>
+                                                <button class='btn btn-primary' type='submit'>Confirm</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
-                            <!--end tab-pane-->
-                            <div class="tab-pane" id="changePassword" role="tabpanel">
-                                <form action="Api/changePass.php" method="post">
-                                    <div class="row g-2">
-                                        <div class="col-lg-4">
-                                            <div>
-                                                <label for="oldpasswordInput" class="form-label">Current Password*</label>
-                                                <input type="password" class="form-control" id="oldpasswordInput" name="pass1">
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                        <div class="col-lg-4">
-                                            <div>
-                                                <label for="newpasswordInput" class="form-label">New Password*</label>
-                                                <input type="password" class="form-control" id="newpasswordInput" name="pass2">
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                        <div class="col-lg-4">
-                                            <div>
-
-                                                <label for="confirmpasswordInput" class="form-label">Confirm Password*</label>
-                                                <input type="password" class="form-control" id="confirmpasswordInput" name="pass3">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-12">
-                                            <div class="text-end">
-                                                <button type="submit" class="btn btn-primary">Change Password</button>
-                                            </div>
-                                        </div>
+                            ";
+                                                echo "  </div>"; // End of price item
+                                                echo "</div>"; // End of col-md-4
+                                            }
+                                        } else {
+                                            echo "<div class='col-md-12'>";
+                                            echo "  <div class='alert alert-warning text-center'>No Packages Available</div>";
+                                            echo "</div>";
+                                        }
+                                        ?>
                                     </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <!-- end page title -->
+                    <!-- end content -->
 
 
                 </div>
-                <!-- container-fluid -->
             </div>
             <!-- End Page-content -->
 

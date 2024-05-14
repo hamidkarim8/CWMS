@@ -1,8 +1,93 @@
-
 <!doctype html>
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
 
 <?php include 'Component/head.php' ?>
+<style>
+    .hero {
+        background-image: url('../car-wash-login.jpg');
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        padding: 4rem 2rem;
+        text-align: center;
+        border-radius: 15px;
+        margin-bottom: 70px;
+    }
+
+    .hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 15px;
+    }
+
+    .hero h1 {
+        position: relative;
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: white;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero p {
+        position: relative;
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+        color: white;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    .btn-hero {
+        padding: 0.5rem 1.5rem;
+        background: #4CAF50;
+        color: white;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .btn-hero:hover {
+        background: #45a049;
+    }
+
+    /* Carousel styling */
+    .carousel {
+        display: flex;
+        overflow: hidden;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+
+    .carousel img {
+        width: 100%;
+        height: auto;
+    }
+
+    .carousel-slide {
+        flex: 0 0 100%;
+        transition: transform 0.5s ease-in-out;
+    }
+
+    .carousel-control {
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        padding: 0.5rem;
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .carousel-control:hover {
+        background: rgba(0, 0, 0, 0.7);
+    }
+</style>
 
 <body>
 
@@ -32,118 +117,71 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                <h4 class="mb-sm-0">Profile</h4>
+                                <h4 class="mb-sm-0">Dashboard</h4>
+
+                                <div class="page-title-right">
+                                    <ol class="breadcrumb m-0">
+                                        <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboards</a></li>
+                                        <li class="breadcrumb-item active">Dashboard</li>
+                                    </ol>
+                                </div>
+
                             </div>
                         </div>
                     </div>
                     <!-- end page title -->
 
-
+                    <!-- start content -->
                     <div class="card-header">
-                        <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-bs-toggle="tab" href="#personalDetails" role="tab">
-                                    <i class="fas fa-home"></i>
-                                    User Information
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-bs-toggle="tab" href="#changePassword" role="tab">
-                                    <i class="far fa-user"></i>
-                                    Change Password
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card-body p-4">
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="personalDetails" role="tabpanel">
-                                <form action="Api/editProfile.php" method="post">
-                                    <div class="row">
-                                    <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label for="firstnameInput" class="form-label">Username</label>
-                                                <input type="text" class="form-control" name="username" disabled value='<?php echo $login_session ?>'>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label for="firstnameInput" class="form-label">Full Name</label>
-                                                <input type="text" class="form-control" name="fullname" value='<?php echo $fullname ?>'>
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label for="lastnameInput" class="form-label">Phone Number</label>
-                                                <input type="text" class="form-control" name="phone" placeholder="Enter Phone Number" value='<?php echo $phone ?>'>
-                                            </div>
-                                        </div>
-                                      
-                                        <!--end col-->
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label for="emailInput" class="form-label">Email</label>
-                                                <input type="email" class="form-control" name="email" value='<?php echo $email  ?>'>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-12">
-                                            <div class="hstack gap-2 justify-content-end">
-                                                <button type="submit" class="btn btn-primary">Update</button>
-                                            </div>
-                                        </div>
-                                        <!--end col-->
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="container">
+                                    <!-- Hero Section -->
+                                    <div class="hero">
+                                        <h1>Welcome to CWMS!</h1>
+                                        <p>Your one-stop solution for premium car cleaning services.</p>
+                                        <a href="view-package.php" class="btn-hero">Book an Appointment</a>
                                     </div>
-                                    <!--end row-->
-                                </form>
-                            </div>
-                            <!--end tab-pane-->
-                            <div class="tab-pane" id="changePassword" role="tabpanel">
-                                <form action="Api/changePass.php" method="post">
-                                    <div class="row g-2">
-                                        <div class="col-lg-4">
-                                            <div>
-                                                <label for="oldpasswordInput" class="form-label">Current Password*</label>
-                                                <input type="password" class="form-control" id="oldpasswordInput" name="pass1">
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                        <div class="col-lg-4">
-                                            <div>
-                                                <label for="newpasswordInput" class="form-label">New Password*</label>
-                                                <input type="password" class="form-control" id="newpasswordInput" name="pass2">
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                        <div class="col-lg-4">
-                                            <div>
 
-                                                <label for="confirmpasswordInput" class="form-label">Confirm Password*</label>
-                                                <input type="password" class="form-control" id="confirmpasswordInput" name="pass3">
-                                            </div>
+                                    <!-- Carousel Slideshow -->
+                                    <div class="carousel" id="carousel">
+                                        <div class="carousel-slide" id="carouselSlide1">
+                                            <img src="../car-wash-slide1.jpg" alt="Service 1" />
                                         </div>
-
-                                        <div class="col-lg-12">
-                                            <div class="text-end">
-                                                <button type="submit" class="btn btn-primary">Change Password</button>
-                                            </div>
+                                        <div class="carousel-slide" id="carouselSlide2">
+                                            <img src="../car-wash-slide2.jpg" alt="Service 2" />
+                                        </div>
+                                        <div class="carousel-slide" id="carouselSlide3">
+                                            <img src="../car-wash-slide3.jpg" alt="Service 3" />
                                         </div>
                                     </div>
-                                </form>
+
+                                    <div style="text-align: center; padding-top: 20px;">
+                                        <button class="carousel-control" onclick="previousSlide()" style="margin-right: 10px;">&#9664;</button>
+                                        <button class="carousel-control" onclick="nextSlide()" style="margin-left: 10px;">&#9654;</button>
+                                    </div>
+
+                                </div>
+
                             </div>
                         </div>
                     </div>
-                    <!-- end page title -->
+                    <!-- end content -->
 
+                </div><!-- end row -->
+            </div><!-- end card body -->
+        </div><!-- end card -->
+    </div><!-- end col -->
+    </div><!-- end row -->
+    </div> <!-- end col -->
+    </div>
+    </div>
+    <!-- container-fluid -->
+    </div>
+    <!-- End Page-content -->
 
-                </div>
-                <!-- container-fluid -->
-            </div>
-            <!-- End Page-content -->
-
-        </div>
-        <!-- end main content-->
+    </div>
+    <!-- end main content-->
 
     </div>
     <!-- END layout-wrapper -->
@@ -829,6 +867,28 @@
     </div>
 
     <?php include 'Component/javascript.php' ?>
+    <script>
+        // Carousel script
+        var currentSlide = 0;
+        var slides = document.querySelectorAll('.carousel-slide');
+
+        function showSlide(index) {
+            var offset = -100 * index;
+            slides.forEach(slide => {
+                slide.style.transform = `translateX(${offset}%)`;
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        function previousSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(currentSlide);
+        }
+    </script>
 </body>
 
 </html>

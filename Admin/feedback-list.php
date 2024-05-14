@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
 
@@ -32,126 +31,127 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                <h4 class="mb-sm-0">Profile</h4>
+                                <h4 class="mb-sm-0">Feedback List</h4>
                             </div>
                         </div>
                     </div>
                     <!-- end page title -->
-
 
                     <div class="card-header">
-                        <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-bs-toggle="tab" href="#personalDetails" role="tab">
-                                    <i class="fas fa-home"></i>
-                                    User Information
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-bs-toggle="tab" href="#changePassword" role="tab">
-                                    <i class="far fa-user"></i>
-                                    Change Password
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card-body p-4">
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="personalDetails" role="tabpanel">
-                                <form action="Api/editProfile.php" method="post">
-                                    <div class="row">
-                                    <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label for="firstnameInput" class="form-label">Username</label>
-                                                <input type="text" class="form-control" name="username" disabled value='<?php echo $login_session ?>'>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label for="firstnameInput" class="form-label">Full Name</label>
-                                                <input type="text" class="form-control" name="fullname" value='<?php echo $fullname ?>'>
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label for="lastnameInput" class="form-label">Phone Number</label>
-                                                <input type="text" class="form-control" name="phone" placeholder="Enter Phone Number" value='<?php echo $phone ?>'>
-                                            </div>
-                                        </div>
-                                      
-                                        <!--end col-->
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label for="emailInput" class="form-label">Email</label>
-                                                <input type="email" class="form-control" name="email" value='<?php echo $email  ?>'>
-                                            </div>
-                                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <!-- <button type="button" class="btn btn-success btn-animation waves-effect waves-light" data-text="Add Package" data-bs-toggle="modal" data-bs-target="#myModal"><span>Add Package</span></button> -->
+                                <br>
+                                <br>
+                                <div class="table-responsive">
+                                    <table class="table table-primary table-striped align-middle table-nowrap mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">No</th>
+                                                <th scope="col">Rate</th>
+                                                <th scope="col">Comment</th>
+                                                <th scope="col">Customer Name</th>
+                                                <th scope="col">Appointment ID</th>
+                                                <th scope="col" class="text-center">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            include('../dbConnect.php');
+                                            $feedback_query = "
+                                            SELECT
+                                            f.id AS feedback_id,
+                                            f.rate,
+                                            f.comment,
+                                            p.fullname AS customer_name,
+                                            f.apptID AS appointment_id
+                                        FROM
+                                            feedback f
+                                         JOIN 
+                                             user u ON u.id = f.custID
+                                        JOIN
+                                             profile p ON p.user_id = u.id
+                                        ORDER BY
+                                            f.id DESC
+                                                                                       ";
 
-                                        <div class="col-lg-12">
-                                            <div class="hstack gap-2 justify-content-end">
-                                                <button type="submit" class="btn btn-primary">Update</button>
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                    </div>
-                                    <!--end row-->
-                                </form>
-                            </div>
-                            <!--end tab-pane-->
-                            <div class="tab-pane" id="changePassword" role="tabpanel">
-                                <form action="Api/changePass.php" method="post">
-                                    <div class="row g-2">
-                                        <div class="col-lg-4">
-                                            <div>
-                                                <label for="oldpasswordInput" class="form-label">Current Password*</label>
-                                                <input type="password" class="form-control" id="oldpasswordInput" name="pass1">
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                        <div class="col-lg-4">
-                                            <div>
-                                                <label for="newpasswordInput" class="form-label">New Password*</label>
-                                                <input type="password" class="form-control" id="newpasswordInput" name="pass2">
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                        <div class="col-lg-4">
-                                            <div>
+                                            $feedback_result = $conn->query($feedback_query);
 
-                                                <label for="confirmpasswordInput" class="form-label">Confirm Password*</label>
-                                                <input type="password" class="form-control" id="confirmpasswordInput" name="pass3">
-                                            </div>
-                                        </div>
+                                            if ($feedback_result->num_rows > 0) {
+                                                $counter = 1;
+                                                while ($row = $feedback_result->fetch_assoc()) {
+                                                    $feedback_id = $row['feedback_id'];
+                                                    $rate = $row['rate'];
+                                                    $stars = str_repeat('☆', $rate);
+                                                    $comment = $row['comment'];
+                                                    $customer_name = $row['customer_name'];
+                                                    $appointment_id = $row['appointment_id'];
 
-                                        <div class="col-lg-12">
-                                            <div class="text-end">
-                                                <button type="submit" class="btn btn-primary">Change Password</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
+                                                    echo "
+                                                   <tr>
+                                                       <th scope='row'>{$counter}</th>
+                                                       <td>{$stars}</td>
+                                                       <td>{$comment}</td>
+                                                       <td>{$customer_name}</td>
+                                                       <td>{$appointment_id}</td>
+                                                       <td>
+                                                           <center>
+                                                               <button type='button' class='btn btn-primary btn-animation waves-effect waves-light' data-bs-toggle='modal' data-bs-target='#viewFeedback{$feedback_id}'>
+                                                                   View
+                                                               </button>
+                                                               <a href='./Api/delete-feedback.php?id={$feedback_id}' class='btn btn-danger btn-animation waves-effect waves-light'>
+                                                                   Delete
+                                                               </a>
+                                                           </center>
+                                                       </td>
+                                                   </tr>
+                                                   ";
+
+                                                    // Modal for viewing detailed feedback
+                                                    echo "
+                                                   <div id='viewFeedback{$feedback_id}' class='modal fade' tabindex='-1' aria-labelledby='viewFeedbackLabel{$feedback_id}' aria-hidden='true'>
+                                                       <div class='modal-dialog'>
+                                                           <div class='modal-content'>
+                                                               <div class='modal-header'>
+                                                                   <h5 class='modal-title' id='viewFeedbackLabel{$feedback_id}'>Feedback for Appointment ID #{$appointment_id}</h5>
+                                                                   <button type='button' class='btn-close' data-bs-dismiss='modal'></button>
+                                                               </div>
+                                                               <div class='modal-body'>
+                                                                   <p><strong>Rating:</strong> {$rate} Stars</p>
+                                                                   <p><strong>Comment:</strong> {$comment}</p>
+                                                                   <p><strong>Customer:</strong> {$customer_name}</p>
+                                                               </div>
+                                                           </div>
+                                                       </div>
+                                                   </div>
+                                                   ";
+
+                                                    $counter++;
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan='6' class='text-center text-danger'>No feedback found.</td></tr>";
+                                            }
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <!-- end page title -->
-
-
-                </div>
-                <!-- container-fluid -->
+                </div> <!-- end col -->
             </div>
-            <!-- End Page-content -->
-
         </div>
-        <!-- end main content-->
-
+        <!-- container-fluid -->
+    </div>
+    <!-- End Page-content -->
+    </div>
+    <!-- end main content-->
     </div>
     <!-- END layout-wrapper -->
 
 
-
     <!--start back-to-top-->
-    <button onclick="topFunction()" class="btn btn-danger btn-icon" id="back-to-top">
+    <button onclick='topFunction()' class="btn btn-danger btn-icon" id="back-to-top">
         <i class="ri-arrow-up-line"></i>
     </button>
     <!--end back-to-top-->

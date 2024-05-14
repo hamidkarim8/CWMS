@@ -6,7 +6,7 @@ $username = 'root';
 
 $password = '';
 
-$database = 'ssems';
+$database = 'cwms';
 
 $conn = mysqli_connect($hostname,  $username,  $password, $database) or die('Connecting to MySQL failed');
 

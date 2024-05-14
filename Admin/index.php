@@ -50,20 +50,20 @@
                         $hari = date('l');
                        
 
-                        $sql="SELECT count(*) as jumlah FROM student";
+                        $sql="SELECT count(*) as total FROM user where role='Customer'";
                         $result = mysqli_query($conn, $sql);
                         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-                        $jumlahPelajar = $row['jumlah'] ?? 0;
+                        $totalCustomer = $row['total'] ?? 0;
                       
-                        $sql3="SELECT count(*) as jumlah FROM user WHERE role='Staff';";
+                        $sql3="SELECT count(*) as total FROM employee;";
                         $result3 = mysqli_query($conn, $sql3);
                         $row3 = mysqli_fetch_array($result3, MYSQLI_ASSOC);
-                        $jumlahFileAvailable = $row3['jumlah'] ?? 0;
+                        $totalEmployee = $row3['total'] ?? 0;
                       
-                        $sql4="SELECT count(*) as jumlah FROM inventory;";
+                        $sql4="SELECT count(*) as total FROM appointment;";
                         $result4 = mysqli_query($conn, $sql4);
                         $row4 = mysqli_fetch_array($result4, MYSQLI_ASSOC);
-                        $jumlahFileNotAvailable = $row4['jumlah'] ?? 0;
+                        $totalAppt = $row4['total'] ?? 0;
                         ?>
                     <div class="row">
                         <div class="col">
@@ -74,39 +74,39 @@
                                             <div class="row row-cols-xxl-3 row-cols-md-3 row-cols-1 g-0">
                                                 <div class="col">
                                                     <div class="py-4 px-3">
-                                                        <h5 class="text-muted text-uppercase fs-13">Total Student</h5>
+                                                        <h5 class="text-muted text-uppercase fs-13">Total Customer</h5>
                                                         <div class="d-flex align-items-center">
                                                             <div class="flex-shrink-0">
-                                                                <i class="ri-space-ship-line display-6 text-muted"></i>
+                                                                <i class="mdi mdi-account-multiple-outline display-6 text-muted"></i>
                                                             </div>
                                                             <div class="flex-grow-1 ms-3">
-                                                                <h2 class="mb-0"><span class="counter-value" data-target="<?php echo $jumlahPelajar?>">0</span></h2>
+                                                                <h2 class="mb-0"><span class="counter-value" data-target="<?php echo $totalCustomer?>">0</span></h2>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div><!-- end col -->
                                                 <div class="col">
                                                     <div class="mt-3 mt-md-0 py-4 px-3">
-                                                        <h5 class="text-muted text-uppercase fs-13">Total Staff</h5>
+                                                        <h5 class="text-muted text-uppercase fs-13">Total Employee</h5>
                                                         <div class="d-flex align-items-center">
                                                             <div class="flex-shrink-0">
-                                                                <i class="ri-exchange-dollar-line display-6 text-muted"></i>
+                                                                <i class="mdi mdi-account-tie display-6 text-muted"></i>
                                                             </div>
                                                             <div class="flex-grow-1 ms-3">
-                                                                <h2 class="mb-0"><span class="counter-value" data-target="<?php echo $jumlahFileAvailable; ?>">0</span></h2>
+                                                                <h2 class="mb-0"><span class="counter-value" data-target="<?php echo $totalEmployee; ?>">0</span></h2>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div><!-- end col -->
                                                 <div class="col">
                                                     <div class="mt-3 mt-md-0 py-4 px-3">
-                                                        <h5 class="text-muted text-uppercase fs-13">Total Equipement Type</h5>
+                                                        <h5 class="text-muted text-uppercase fs-13">Total Appointment</h5>
                                                         <div class="d-flex align-items-center">
                                                             <div class="flex-shrink-0">
-                                                                <i class="ri-pulse-line display-6 text-muted"></i>
+                                                                <i class="mdi mdi-check-circle-outline display-6 text-muted"></i>
                                                             </div>
                                                             <div class="flex-grow-1 ms-3">
-                                                                <h2 class="mb-0"><span class="counter-value" data-target="<?php echo $jumlahFileNotAvailable;?>">0</span></h2>
+                                                                <h2 class="mb-0"><span class="counter-value" data-target="<?php echo $totalAppt;?>">0</span></h2>
                                                             </div>
                                                         </div>
                                                     </div>

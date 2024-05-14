@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
 
@@ -32,126 +31,180 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                <h4 class="mb-sm-0">Profile</h4>
+                                <h4 class="mb-sm-0">Branch List</h4>
                             </div>
                         </div>
                     </div>
                     <!-- end page title -->
-
 
                     <div class="card-header">
-                        <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-bs-toggle="tab" href="#personalDetails" role="tab">
-                                    <i class="fas fa-home"></i>
-                                    User Information
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-bs-toggle="tab" href="#changePassword" role="tab">
-                                    <i class="far fa-user"></i>
-                                    Change Password
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card-body p-4">
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="personalDetails" role="tabpanel">
-                                <form action="Api/editProfile.php" method="post">
-                                    <div class="row">
-                                    <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label for="firstnameInput" class="form-label">Username</label>
-                                                <input type="text" class="form-control" name="username" disabled value='<?php echo $login_session ?>'>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label for="firstnameInput" class="form-label">Full Name</label>
-                                                <input type="text" class="form-control" name="fullname" value='<?php echo $fullname ?>'>
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label for="lastnameInput" class="form-label">Phone Number</label>
-                                                <input type="text" class="form-control" name="phone" placeholder="Enter Phone Number" value='<?php echo $phone ?>'>
-                                            </div>
-                                        </div>
-                                      
-                                        <!--end col-->
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label for="emailInput" class="form-label">Email</label>
-                                                <input type="email" class="form-control" name="email" value='<?php echo $email  ?>'>
-                                            </div>
-                                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <button type="button" class="btn btn-success btn-animation waves-effect waves-light" data-text="Add Package" data-bs-toggle="modal" data-bs-target="#myModal"><span>Add Package</span></button>
+                                <br>
+                                <br>
+                                <div class="table-responsive">
+                                    <table class="table table-primary table-striped align-middle table-nowrap mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">No</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Location</th>
+                                                <th scope="col">Phone Number</th>
+                                                <th scope="col">Availability</th>
+                                                <th scope="col" class="text-center">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            include('../dbConnect.php');
+                                            $query = "SELECT * FROM branch;";
+                                            $result = $conn->query($query);
+                                            $modal = 1;
+                                            if ($result->num_rows > 0) {
+                                                while ($row = $result->fetch_assoc()) {
+                                                    $name = $row['name'];
+                                                    $id = $row['id'];
+                                                    $location = isset($row['location']) ? $row['location'] : 'No location';
+                                                    $phone = $row['phone'];
+                                                    $open = $row['isOpen'];
+                                                    $is_open_text = $open ? "Open" : "Close";
 
-                                        <div class="col-lg-12">
-                                            <div class="hstack gap-2 justify-content-end">
-                                                <button type="submit" class="btn btn-primary">Update</button>
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                    </div>
-                                    <!--end row-->
-                                </form>
+                                                    echo "
+                                                    <tr>
+                                                    <th scope='row'>$modal</th>
+                                                    <td>$name</td>
+                                                    <td>$location</td>
+                                                    <td>$phone</td>
+                                                    <td>$is_open_text</td>
+                                                    <td >
+                                                        <center>
+                                                            <button type='button' class='btn btn-primary btn-animation waves-effect waves-light data-text='Update' data-bs-toggle='modal' data-bs-target='#view2$modal'>
+                                                                Update
+                                                            </button>
+                                                            <a href='./Api/delete-branch.php?id=$id' class='btn btn-danger btn-animation waves-effect waves-light data-text='Buang'>
+                                                                Delete
+                                                            </a>
+                                                        </center>
+                                                    </td>
+                                                </tr>
+                                                    ";
+
+                                                    echo "
+                                                    <div id='view2$modal' class='modal fade' tabindex='-1' aria-labelledby='myModalLabel' aria-hidden='true' style='display: none;'>
+                                                        <div class='modal-dialog'>
+                                                            <div class='modal-content'>
+                                                                <div class='modal-header'>
+                                                                    <h5 class='modal-title' id='myModalLabel'>Update Branch Information</h5>
+                                                                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'> </button>
+                                                                </div>
+                                                                <form method='post' action='Api/update-branch.php'>
+                                                                    <div class='modal-body'>
+                                                                        <div class='col-md-12 mt-4'>
+                                                                            <label for='inputEmail4' class='form-label'>Branch ID</label>
+                                                                            <input type='text' class='form-control' value='$id' disabled>
+                                                                        </div>
+                                                                        <div class='col-md-12 mt-4'>
+                                                                            <label for='inputEmail4' class='form-label'>Name </label>
+                                                                            <input type='text' class='form-control' name='name' value='$name' required>
+                                                                        </div>
+                                                                        <div class='col-md-12 mt-4'>
+                                                                            <label for='inputEmail4' class='form-label'>Location (comma as separator)</label>
+                                                                            <input type='text' class='form-control' name='location' value='$location' required>
+                                                                        </div>
+                                                                        <div class='col-md-12 mt-4'>
+                                                                            <label for='inputEmail4' class='form-label'>Phone Number</label>
+                                                                            <input type='number' class='form-control' name='phone' value='$phone' required>
+                                                                        </div>
+                                                                        <div class='col-md-12 mt-4'>
+                                                                        <label for='isOpen' class='form-label'>Open this branch?</label>
+                                                                        <input type='checkbox' id='isOpen' name='isOpen' value='1' ";
+                                                    if ($open == 1) {
+                                                        echo "checked";
+                                                    }
+                                                    echo ">
+                                                                    </div>
+                                                                        
+                                                                        <input type='hidden' value='$id' name='id' />
+                                                                    </div>
+                                                                    <div class='modal-footer'>
+                                                                        <button class='btn btn-primary' type='submit'>Update</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ";
+
+
+                                                    $modal++;
+                                                }
+                                            } else {
+                                                echo "
+                                                <tr>
+                                                <td colspan='9' align='center' style='color:red;' >No Branch Available</td>
+                                                </tr>";
+                                            }
+                                            ?>
+                                        </tbody>
+                                    </table>
+
+                                </div>
                             </div>
-                            <!--end tab-pane-->
-                            <div class="tab-pane" id="changePassword" role="tabpanel">
-                                <form action="Api/changePass.php" method="post">
-                                    <div class="row g-2">
-                                        <div class="col-lg-4">
-                                            <div>
-                                                <label for="oldpasswordInput" class="form-label">Current Password*</label>
-                                                <input type="password" class="form-control" id="oldpasswordInput" name="pass1">
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                        <div class="col-lg-4">
-                                            <div>
-                                                <label for="newpasswordInput" class="form-label">New Password*</label>
-                                                <input type="password" class="form-control" id="newpasswordInput" name="pass2">
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                        <div class="col-lg-4">
-                                            <div>
-
-                                                <label for="confirmpasswordInput" class="form-label">Confirm Password*</label>
-                                                <input type="password" class="form-control" id="confirmpasswordInput" name="pass3">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-12">
-                                            <div class="text-end">
-                                                <button type="submit" class="btn btn-primary">Change Password</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                        </div> <!-- end col -->
                     </div>
-                    <!-- end page title -->
-
-
                 </div>
                 <!-- container-fluid -->
             </div>
             <!-- End Page-content -->
-
         </div>
         <!-- end main content-->
-
     </div>
     <!-- END layout-wrapper -->
+
+    <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="myModalLabel">Add Branch</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+                </div>
+                <form method='post' action='Api/add-branch.php'>
+                    <div class='modal-body'>
+                        <h5 class='fs-15'>
+                            <span style='color:red;'>*</span> Fill All Information<br>
+
+                        </h5>
+
+                        <div class='col-md-12 mt-4'>
+                            <label for='inputEmail4' class='form-label'>Name </label>
+                            <input type='text' class='form-control' name='name' required>
+                        </div>
+
+                        <div class='col-md-12 mt-4'>
+                            <label for='inputDescription' class='form-label'>Location (comma as separator)</label>
+                            <input type='text' class='form-control' name='location' placeholder='State, Country' required>
+                        </div>
+
+                        <div class='col-md-12 mt-4'>
+                            <label for='inputEmail4' class='form-label'>Phone Number</label>
+                            <input type='number' class='form-control' name='phone' required>
+                        </div>
+
+                    </div>
+                    <div class='modal-footer'>
+                        <button class='btn btn-primary' type='submit'>Add Branch</button>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
 
 
 
     <!--start back-to-top-->
-    <button onclick="topFunction()" class="btn btn-danger btn-icon" id="back-to-top">
+    <button onclick='topFunction()' class="btn btn-danger btn-icon" id="back-to-top">
         <i class="ri-arrow-up-line"></i>
     </button>
     <!--end back-to-top-->

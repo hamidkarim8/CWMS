@@ -84,7 +84,7 @@
                                         <div class="col-lg-6">
                                             <div class="mb-3">
                                                 <label for="emailInput" class="form-label">Email</label>
-                                                <input type="email" class="form-control" name="email" value='<?php echo $email  ?>'>
+                                                <input type="email" class="form-control" name="email" value='<?php echo $email ?>'>
                                             </div>
                                         </div>
 

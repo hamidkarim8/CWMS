@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
 
@@ -32,126 +31,407 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                <h4 class="mb-sm-0">Profile</h4>
+                                <h4 class="mb-sm-0">Appointment List</h4>
                             </div>
                         </div>
                     </div>
                     <!-- end page title -->
-
 
                     <div class="card-header">
-                        <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-bs-toggle="tab" href="#personalDetails" role="tab">
-                                    <i class="fas fa-home"></i>
-                                    User Information
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-bs-toggle="tab" href="#changePassword" role="tab">
-                                    <i class="far fa-user"></i>
-                                    Change Password
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card-body p-4">
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="personalDetails" role="tabpanel">
-                                <form action="Api/editProfile.php" method="post">
-                                    <div class="row">
-                                    <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label for="firstnameInput" class="form-label">Username</label>
-                                                <input type="text" class="form-control" name="username" disabled value='<?php echo $login_session ?>'>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label for="firstnameInput" class="form-label">Full Name</label>
-                                                <input type="text" class="form-control" name="fullname" value='<?php echo $fullname ?>'>
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label for="lastnameInput" class="form-label">Phone Number</label>
-                                                <input type="text" class="form-control" name="phone" placeholder="Enter Phone Number" value='<?php echo $phone ?>'>
-                                            </div>
-                                        </div>
-                                      
-                                        <!--end col-->
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label for="emailInput" class="form-label">Email</label>
-                                                <input type="email" class="form-control" name="email" value='<?php echo $email  ?>'>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-12">
-                                            <div class="hstack gap-2 justify-content-end">
-                                                <button type="submit" class="btn btn-primary">Update</button>
-                                            </div>
-                                        </div>
-                                        <!--end col-->
+                        <div class="card">
+                            <div class="card-body">
+                                <!-- Dropdown to filter by status -->
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <button type="button" class="btn btn-success btn-animation waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#walkInModal">
+                                        Book Walk-In
+                                    </button>
+                                    <div style="width: 200px;">
+                                        <select class="form-select" id="statusFilter" onchange="filterByStatus()">
+                                            <option value="All">All</option>
+                                            <option value="Pending">Pending</option>
+                                            <option value="Accepted">Accepted</option>
+                                            <option value="Declined">Declined</option>
+                                            <option value="Paid">Paid</option>
+                                            <option value="Completed">Completed</option>
+                                        </select>
                                     </div>
-                                    <!--end row-->
-                                </form>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-primary table-striped align-middle table-nowrap mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">No</th>
+                                                <th scope="col">Package</th>
+                                                <th scope="col">Customer</th>
+                                                <th scope="col">Branch</th>
+                                                <th scope="col">Employee</th>
+                                                <th scope="col">Vehicle</th>
+                                                <!-- <th scope="col">Appointment ID</th> -->
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Time</th>
+                                                <th scope="col" class="text-center">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            include('../dbConnect.php');
+                                            // Define how many results you want per page
+                                            $results_per_page = 12;
+
+                                            // Determine the total number of rows in the result set
+                                            $total_results_query = "SELECT COUNT(*) AS total FROM appointment";
+                                            $total_results_result = $conn->query($total_results_query);
+                                            $total_results_row = $total_results_result->fetch_assoc();
+                                            $total_results = $total_results_row['total'];
+
+                                            // Determine the total number of pages
+                                            $total_pages = ceil($total_results / $results_per_page);
+
+                                            // Determine the current page number, or set it to 1 if it's not set
+                                            $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
+
+                                            // Calculate the SQL LIMIT starting number for the results on the displaying page
+                                            $offset = ($current_page - 1) * $results_per_page;
+                                            $query = "
+                            SELECT
+                                a.id AS appointment_id,
+                                wp.name AS package_name,
+                                c.userID AS user_id,
+                                u.id AS customer_id,
+                                b.name AS branch_name,
+                                b.id AS branch_id,
+                                p.fullname AS customer_name,
+                                GROUP_CONCAT(e.name) AS employee_names,
+                                v.plateNo AS vehicle_plate,
+                                v.model AS vehicle_model,
+                                v.color AS vehicle_color,
+                                a.date AS appointment_date,
+                                a.start_time,
+                                a.end_time,
+                                a.status,
+                                py.amount AS payment_amount,
+                                py.paymentMethod AS payment_method,
+                                py.paymentProofPath AS payment_proof_path
+                            FROM
+                                appointment a
+                            JOIN
+                                washPackage wp ON a.washPackID = wp.id
+                            JOIN
+                                branch b ON a.branchID = b.id
+                            JOIN
+                                customer c ON a.custID = c.id
+							JOIN
+								user u ON c.userID= u.id
+                            JOIN
+                                vehicle v ON a.vehicleID = v.id
+							JOIN
+								profile p ON p.user_id = u.id
+                            LEFT JOIN
+                                appointmentEmp ae ON a.id = ae.apptID
+                            LEFT JOIN
+                                employee e ON ae.empID = e.id
+                                LEFT JOIN
+                                payment py ON py.apptID = a.id
+                            GROUP BY
+                                a.id
+                            ORDER BY
+                                a.date, a.start_time
+                                LIMIT $offset, $results_per_page
+                        ";
+
+                                            $stmt = $conn->prepare($query);
+                                            $stmt->execute();
+                                            $result = $stmt->get_result();
+
+                                            $modal_id = 1; // To assign unique IDs to modals
+                                            $counter = 1;
+                                            if ($result->num_rows > 0) :
+                                                while ($row = $result->fetch_assoc()) :
+                                                    $appointment_id = $row['appointment_id'];
+                                                    $package_name = $row['package_name'];
+                                                    $customer_name = $row['customer_name'];
+                                                    $customer_id = $row['customer_id'];
+                                                    $customer_names_display = $customer_id == 99 ? "<span style='color: blue;'>$customer_name</span>" : $customer_name;
+                                                    $branch_name = $row['branch_name'];
+                                                    $employee_names = $row['employee_names'] ?: 'Not Assigned';
+                                                    $employee_names_display = $employee_names == 'Not Assigned' ? "<span style='color: red;'>$employee_names</span>" : $employee_names;
+                                                    $vehicle_details = "{$row['vehicle_plate']} ({$row['vehicle_model']} - {$row['vehicle_color']})";
+                                                    $appointment_date = $row['appointment_date'];
+                                                    $appointment_time = "{$row['start_time']} - {$row['end_time']}";
+                                                    $status = ucfirst($row['status']);
+                                                    $payment_amount = $row['payment_amount'];
+                                                    $payment_method = $row['payment_method'];
+                                                    $payment_proof_path = $row['payment_proof_path'];
+
+                                                    echo "<tr class='status-{$status}'>";
+                                                    echo "<td>{$counter}</td>";
+                                                    echo "<td>{$package_name}</td>";
+                                                    echo "<td>{$customer_names_display}</td>";
+                                                    echo "<td>{$branch_name}</td>";
+                                                    echo "<td>{$employee_names_display}</td>";
+                                                    echo "<td>{$vehicle_details}</td>";
+                                                    // echo "<td>{$appointment_id}</td>";
+                                                    echo "<td>{$appointment_date}</td>";
+                                                    echo "<td>{$appointment_time}</td>";
+                                                    echo "<td class='text-center'>";
+
+                                                    if ($status == 'Pending') :
+                                                        echo "
+        <a href='./Api/accept-appointment.php?id=$appointment_id' class='btn btn-success btn-animation waves-effect waves-light'>
+            Accept
+        </a>
+        <a href='./Api/decline-appointment.php?id=$appointment_id' class='btn btn-danger btn-animation waves-effect waves-light'>
+            Decline
+        </a>
+    ";
+
+                                                    // Show Pending Payment badge when status is Accepted
+                                                    elseif ($status == 'Accepted') :
+                                                        echo "<span class='badge bg-warning'>Pending Payment</span>";
+
+                                                    // Show Declined badge when status is Declined
+                                                    elseif ($status == 'Declined') :
+                                                        echo "<span class='badge bg-danger'>Declined</span>";
+
+                                                    // If status is Paid and no employee has been assigned, show Assign Employee button
+                                                    elseif ($status == 'Paid' && $employee_names_display == "<span style='color: red;'>Not Assigned</span>") :
+                                                        echo "<span class='ms-2' data-bs-toggle='tooltip' title='View Proof of Payment'>
+                                                        <i class='mdi mdi-eye' style='cursor: pointer;' data-bs-toggle='modal' data-bs-target='#viewPayment{$modal_id}'></i>
+                                                    <br/></span>";
+                                                        echo "
+        <button type='button' class='btn btn-primary btn-animation waves-effect waves-light' data-bs-toggle='modal' data-bs-target='#assignEmployee{$modal_id}'>
+            Assign Task
+        </button>
+    ";
+
+                                                    // If status is Paid and at least one employee is assigned, show In Progress badge and Complete button
+                                                    elseif ($status == 'Paid' && $employee_names_display != "<span style='color: red;'>Not Assigned</span>") :
+                                                        echo "<span class='badge bg-info'>In Progress</span>";
+                                                        echo "
+        <br/><a href='./Api/complete-appointment.php?id=$appointment_id' class='btn btn-primary btn-animation waves-effect waves-light mt-2'>
+            Complete
+        </a>
+    ";
+
+                                                    // Show Completed badge when status is Completed
+                                                    elseif ($status == 'Completed') :
+                                                        echo "<span class='badge bg-success'>Completed</span>";
+
+                                                    endif;
+
+                                                    echo "</td>";
+                                                    echo "</tr>";
+                                                    // Payment proof modal
+                                                    echo "
+<div id='viewPayment{$modal_id}' class='modal fade' tabindex='-1' aria-labelledby='viewPaymentLabel{$modal_id}' aria-hidden='true'>
+    <div class='modal-dialog modal-dialog-centered' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title' id='viewPaymentLabel{$modal_id}'>Payment Information for Appointment ID #{$appointment_id}</h5>
+                <button type='button' class='btn-close' data-bs-dismiss='modal'></button>
+            </div>
+            <div class='modal-body'>
+                <p><strong>Price:</strong> RM{$payment_amount}</p>
+                <p><strong>Payment Method:</strong> {$payment_method}</p>
+";
+
+                                                    if ($payment_proof_path) {
+                                                        $is_pdf = pathinfo($payment_proof_path, PATHINFO_EXTENSION) === 'pdf';
+
+                                                        if ($is_pdf) {
+                                                            echo "
+        <p><strong>Proof of Payment (PDF):</strong></p>
+        <iframe src='" . substr($payment_proof_path, 1) . "' style='width:100%; height:400px;' frameborder='0'></iframe>
+    ";
+                                                        } else {
+                                                            echo "
+        <p><strong>Proof of Payment (Image):</strong></p>
+        <img src='" . substr($payment_proof_path, 1) . "' alt='Proof of Payment' style='max-width:100%; height:auto;'>
+    ";
+                                                        }
+                                                    } else {
+                                                        echo "<p>Payment made by cash at the counter.</p>";
+                                                    }
+
+                                                    echo "
+            </div>
+        </div>
+    </div>
+</div>
+";
+
+                                                    // Modal for assigning employees
+                                                    echo "
+                                <div id='assignEmployee{$modal_id}' class='modal fade' tabindex='-1' aria-labelledby='assignEmployee{$modal_id}Label' aria-hidden='true'>
+                                    <div class='modal-dialog'>
+                                        <div class='modal-content'>
+                                            <div class='modal-header'>
+                                                <h5 class='modal-title' id='assignEmployee{$modal_id}Label'>Assign Employee to Appointment ID #{$appointment_id} ({$appointment_date}) ({$appointment_time}) at Branch {$branch_name}</h5>
+                                                <button type='button' class='btn-close' data-bs-dismiss='modal'></button>
+                                            </div>
+                                            <form method='post' action='Api/assign-employee.php'>
+                                                <div class='modal-body'>
+                                                    <input type='hidden' name='appointment_id' value='{$appointment_id}'>
+                                                    <label>Select Employee(s)</label>
+                                                    <div class='form-group'>";
+
+                                                    // Fetching employees based on the branch
+                                                    $emp_query = "
+                                                        SELECT 
+                                                            id, name, position 
+                                                        FROM 
+                                                            employee 
+                                                        WHERE 
+                                                            branchID = ? AND isAvailable = 1
+                                                    ";
+                                                    $emp_stmt = $conn->prepare($emp_query);
+                                                    $emp_stmt->bind_param('i', $row['branch_id']);
+                                                    $emp_stmt->execute();
+                                                    $emp_result = $emp_stmt->get_result();
+                                                    if ($emp_result->num_rows > 0) {
+                                                        // Display the employee checkboxes
+                                                        while ($emp_row = $emp_result->fetch_assoc()) {
+                                                            echo "<div class='form-check'>
+                                                                <input type='checkbox' name='employee_ids[]' value='{$emp_row['id']}'>
+                                                                <label>{$emp_row['name']} - {$emp_row['position']}</label>
+                                                            </div>";
+                                                        }
+                                                    } else {
+                                                        echo "<p>No employees found for this branch.</p>";
+                                                        // echo "<script>console.log('Branch ID: {$row['branch_id']}');</script>";
+
+                                                    }
+                                                    // while ($emp_row = $emp_result->fetch_assoc()) {
+                                                    //     echo "<div class='form-check'>
+                                                    //         <input type='checkbox' name='employee_ids[]' value='{$emp_row['id']}'>
+                                                    //         <label>{$emp_row['name']} - {$emp_row['position']}</label>
+                                                    //     </div>";
+                                                    // }
+
+                                                    echo "
+                                                    </div>
+                                                </div>
+                                                <div class='modal-footer'>
+                                                    <button type='submit' class='btn btn-primary'>Assign</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                ";
+
+                                                    $modal_id++;
+                                                    $counter++;
+                                                endwhile;
+                                            else :
+                                                echo "<tr><td colspan='9' class='text-center text-danger'>No appointments found.</td></tr>";
+                                            endif;
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                    <!-- Pagination Links -->
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination justify-content-center mt-4">
+                                            <?php for ($page = 1; $page <= $total_pages; $page++) : ?>
+                                                <li class="page-item <?php echo ($current_page == $page) ? 'active' : ''; ?>">
+                                                    <a class="page-link" href="?page=<?php echo $page; ?>"><?php echo $page; ?></a>
+                                                </li>
+                                            <?php endfor; ?>
+                                        </ul>
+                                    </nav>
+                                </div>
                             </div>
-                            <!--end tab-pane-->
-                            <div class="tab-pane" id="changePassword" role="tabpanel">
-                                <form action="Api/changePass.php" method="post">
-                                    <div class="row g-2">
-                                        <div class="col-lg-4">
-                                            <div>
-                                                <label for="oldpasswordInput" class="form-label">Current Password*</label>
-                                                <input type="password" class="form-control" id="oldpasswordInput" name="pass1">
-                                            </div>
+                        </div>
+                    </div>
+                    <div id="walkInModal" class="modal fade" tabindex="-1" aria-labelledby="walkInModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="walkInModalLabel">Book Walk-In Appointment</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form method="post" action="Api/book-package.php">
+                                    <div class="modal-body">
+                                        <!-- Dropdown to select a package -->
+                                        <div class="mb-3">
+                                            <label class="form-label">Select Package</label>
+                                            <select class="form-control" name="washPackID" required>
+                                                <!-- Fetch packages to populate the dropdown -->
+                                                <?php
+                                                include('../dbConnect.php');
+                                                $package_query = "SELECT id, name FROM washPackage;";
+                                                $package_result = $conn->query($package_query);
+                                                while ($package_row = $package_result->fetch_assoc()) {
+                                                    echo "<option value='{$package_row['id']}'>{$package_row['name']}</option>";
+                                                }
+                                                ?>
+                                            </select>
                                         </div>
-                                        <!--end col-->
-                                        <div class="col-lg-4">
-                                            <div>
-                                                <label for="newpasswordInput" class="form-label">New Password*</label>
-                                                <input type="password" class="form-control" id="newpasswordInput" name="pass2">
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                        <div class="col-lg-4">
-                                            <div>
 
-                                                <label for="confirmpasswordInput" class="form-label">Confirm Password*</label>
-                                                <input type="password" class="form-control" id="confirmpasswordInput" name="pass3">
-                                            </div>
+                                        <!-- Select branch -->
+                                        <div class="mb-3">
+                                            <label class="form-label">Select Branch</label>
+                                            <select class="form-control" name="branchID" required>
+                                                <!-- Fetch branches to populate the dropdown -->
+                                                <?php
+                                                $branch_query = "SELECT id, name FROM branch WHERE isOpen = 1;";
+                                                $branch_result = $conn->query($branch_query);
+                                                while ($branch_row = $branch_result->fetch_assoc()) {
+                                                    echo "<option value='{$branch_row['id']}'>{$branch_row['name']}</option>";
+                                                }
+                                                ?>
+                                            </select>
                                         </div>
 
-                                        <div class="col-lg-12">
-                                            <div class="text-end">
-                                                <button type="submit" class="btn btn-primary">Change Password</button>
-                                            </div>
+                                        <!-- Additional fields for booking -->
+                                        <div class="mb-3">
+                                            <label class="form-label">Select Date</label>
+                                            <input type="date" class="form-control" name="appointmentDate" required />
                                         </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Select Time</label>
+                                            <input type="time" class="form-control" name="appointmentTime" required min='08:00' max='17:00' step='1800' />
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Vehicle Plate Number</label>
+                                            <input type="text" class="form-control" name="plateNo" required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Vehicle Model</label>
+                                            <input type="text" class="form-control" name="model" required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Vehicle Color</label>
+                                            <input type="text" class="form-control" name="color" required />
+                                        </div>
+
+                                        <!-- Hidden field to set customer ID to walk-in (2) -->
+                                        <input type="hidden" name="custID" value="2" />
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-primary" type="submit">Confirm</button>
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
-                    <!-- end page title -->
 
-
+                    <!-- end content -->
                 </div>
                 <!-- container-fluid -->
             </div>
             <!-- End Page-content -->
-
         </div>
         <!-- end main content-->
-
     </div>
     <!-- END layout-wrapper -->
 
 
 
     <!--start back-to-top-->
-    <button onclick="topFunction()" class="btn btn-danger btn-icon" id="back-to-top">
+    <button onclick='topFunction()' class="btn btn-danger btn-icon" id="back-to-top">
         <i class="ri-arrow-up-line"></i>
     </button>
     <!--end back-to-top-->
@@ -829,6 +1109,21 @@
     </div>
 
     <?php include 'Component/javascript.php' ?>
+    <script>
+        function filterByStatus() {
+            const statusFilter = document.getElementById("statusFilter").value;
+            const rows = document.querySelectorAll(".table tbody tr");
+
+            rows.forEach((row) => {
+                const status = row.className.split("status-")[1];
+                if (statusFilter === "All" || status.toLowerCase() === statusFilter.toLowerCase()) {
+                    row.style.display = "table-row";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>

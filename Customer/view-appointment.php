@@ -1,8 +1,92 @@
-
 <!doctype html>
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
 
 <?php include 'Component/head.php' ?>
+
+<head>
+    <style>
+        .container {
+            padding-top: 2rem;
+        }
+
+        .appointment-card {
+            border-radius: 15px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, #f5f7fa, #e2e8f0);
+            transition: all 0.3s ease-in-out;
+            margin-bottom: 1.5rem;
+        }
+
+        .appointment-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .appointment-card .card-body {
+            padding: 1.5rem;
+            color: #000;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .appointment-card h5 {
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .appointment-status {
+            display: inline-block;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            color: #ffffff;
+        }
+
+        .status-pending {
+            background-color: #ffab00;
+        }
+
+        .status-accepted {
+            background-color: #4CAF50;
+        }
+
+        .status-completed {
+            background-color: #2196F3;
+        }
+
+        .status-declined {
+            background-color: #f44336;
+        }
+
+        .status-paid {
+            background-color: #9c27b0;
+        }
+
+        .alert {
+            border-radius: 10px;
+        }
+
+        .underline {
+            text-decoration: underline;
+        }
+
+        .payment-info {
+            background-color: #f5f5f5;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .payment-info p,
+        .payment-info label {
+            color: #000 !important;
+        }
+
+        .modal-content {
+            border-radius: 15px;
+        }
+    </style>
+</head>
 
 <body>
 
@@ -32,113 +116,181 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                <h4 class="mb-sm-0">Profile</h4>
+                                <h4 class="mb-sm-0">Appointment History</h4>
                             </div>
                         </div>
                     </div>
-                    <!-- end page title -->
 
+                    <?php
 
+                    include("../dbConnect.php");
+
+                    $uid = $_SESSION['uid'];
+
+                    $query = "
+    SELECT 
+        a.id AS appointment_id,
+        wp.name AS package_name,
+        a.date AS appointment_date,
+        a.start_time,
+        a.end_time,
+        a.status,
+        b.name AS branch_name,
+        v.plateNo AS vehicle_plate,
+        v.model AS vehicle_model,
+        v.color AS vehicle_color,
+        wp.price AS package_price,
+        f.id AS feedback_id
+    FROM 
+        appointment a
+    JOIN 
+        washPackage wp ON a.washPackID = wp.id
+    JOIN 
+        branch b ON a.branchID = b.id
+    JOIN 
+        vehicle v ON a.vehicleID = v.id
+    JOIN 
+        customer c ON a.custID = c.id
+    LEFT JOIN
+        feedback f ON f.apptID = a.id
+    WHERE 
+        c.userID = ?
+    ORDER BY 
+        a.date, a.start_time
+";
+
+                    $stmt = $conn->prepare($query);
+                    $stmt->bind_param('i', $uid);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+
+                    ?>
+
+                    <!-- Start content -->
                     <div class="card-header">
-                        <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-bs-toggle="tab" href="#personalDetails" role="tab">
-                                    <i class="fas fa-home"></i>
-                                    User Information
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-bs-toggle="tab" href="#changePassword" role="tab">
-                                    <i class="far fa-user"></i>
-                                    Change Password
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card-body p-4">
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="personalDetails" role="tabpanel">
-                                <form action="Api/editProfile.php" method="post">
-                                    <div class="row">
-                                    <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label for="firstnameInput" class="form-label">Username</label>
-                                                <input type="text" class="form-control" name="username" disabled value='<?php echo $login_session ?>'>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label for="firstnameInput" class="form-label">Full Name</label>
-                                                <input type="text" class="form-control" name="fullname" value='<?php echo $fullname ?>'>
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label for="lastnameInput" class="form-label">Phone Number</label>
-                                                <input type="text" class="form-control" name="phone" placeholder="Enter Phone Number" value='<?php echo $phone ?>'>
-                                            </div>
-                                        </div>
-                                      
-                                        <!--end col-->
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label for="emailInput" class="form-label">Email</label>
-                                                <input type="email" class="form-control" name="email" value='<?php echo $email  ?>'>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-12">
-                                            <div class="hstack gap-2 justify-content-end">
-                                                <button type="submit" class="btn btn-primary">Update</button>
-                                            </div>
-                                        </div>
-                                        <!--end col-->
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="container">
+                                    <div class="section-header text-center mb-4 mt-2">
+                                        <h2>Your Booked Appointments</h2>
                                     </div>
-                                    <!--end row-->
-                                </form>
-                            </div>
-                            <!--end tab-pane-->
-                            <div class="tab-pane" id="changePassword" role="tabpanel">
-                                <form action="Api/changePass.php" method="post">
-                                    <div class="row g-2">
-                                        <div class="col-lg-4">
-                                            <div>
-                                                <label for="oldpasswordInput" class="form-label">Current Password*</label>
-                                                <input type="password" class="form-control" id="oldpasswordInput" name="pass1">
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                        <div class="col-lg-4">
-                                            <div>
-                                                <label for="newpasswordInput" class="form-label">New Password*</label>
-                                                <input type="password" class="form-control" id="newpasswordInput" name="pass2">
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                        <div class="col-lg-4">
-                                            <div>
 
-                                                <label for="confirmpasswordInput" class="form-label">Confirm Password*</label>
-                                                <input type="password" class="form-control" id="confirmpasswordInput" name="pass3">
-                                            </div>
-                                        </div>
+                                    <?php if ($result->num_rows > 0) : ?>
+                                        <div class="row justify-content-center">
+                                            <?php while ($row = $result->fetch_assoc()) : ?>
+                                                <div class="col-md-6 col-lg-4">
+                                                    <div class="card appointment-card">
+                                                        <div class="card-body">
+                                                            <h5 class="text-info mb-4 text-center"><?php echo $row['package_name']; ?></h5>
+                                                            <p><strong>Branch:</strong> <?php echo $row['branch_name']; ?></p>
+                                                            <p><strong>Date:</strong> <?php echo $row['appointment_date']; ?></p>
+                                                            <p><strong>Time:</strong> <?php echo $row['start_time']; ?> - <?php echo $row['end_time']; ?></p>
+                                                            <p><strong>Vehicle:</strong> <?php echo $row['vehicle_plate']; ?> (<?php echo $row['vehicle_model']; ?> - <?php echo $row['vehicle_color']; ?>)</p>
+                                                            <p><strong>Price:</strong> RM<?php echo $row['package_price']; ?></p>
+                                                            <div class="text-center">
+                                                                <span class="appointment-status <?php echo 'status-' . strtolower($row['status']); ?>">
+                                                                    <?php echo ucfirst($row['status']); ?>
+                                                                </span>
+                                                                <?php if ($row['status'] === 'Accepted') : ?>
+                                                                    <a href="#" style="text-decoration: underline !important; color: blue !important;" data-bs-toggle="modal" data-bs-target="#paymentModal<?php echo $row['appointment_id']; ?>" class="d-block mt-2">
+                                                                        Make Payment
+                                                                    </a>
+                                                                <?php endif; ?>
+                                                                <?php if ($row['status'] === 'Completed' && !$row['feedback_id']) : ?>
+                                                                    <a href="#" style="text-decoration: underline !important; color: blue !important ;" data-bs-toggle="modal" data-bs-target="#feedbackModal<?php echo $row['appointment_id']; ?>" class="d-block mt-2">
+                                                                        Give Feedback
+                                                                    </a>
+                                                                <?php endif; ?>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
-                                        <div class="col-lg-12">
-                                            <div class="text-end">
-                                                <button type="submit" class="btn btn-primary">Change Password</button>
-                                            </div>
+                                                <!-- Modal for Payment -->
+                                                <div id="paymentModal<?php echo $row['appointment_id']; ?>" class="modal fade" tabindex="-1" aria-labelledby="paymentModalLabel<?php echo $row['appointment_id']; ?>" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="paymentModalLabel<?php echo $row['appointment_id']; ?>">
+                                                                    Make Payment for Appointment ID #<?php echo $row['appointment_id']; ?>
+                                                                </h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                            </div>
+                                                            <form method="post" action="Api/make-payment.php" enctype="multipart/form-data">
+                                                                <input type="hidden" name="appointment_id" value="<?php echo $row['appointment_id']; ?>">
+
+                                                                <div class="modal-body">
+                                                                    <div class="payment-info">
+                                                                        <p><strong>Price:</strong> RM<?php echo $row['package_price']; ?></p>
+                                                                        <label for="paymentMethod">Payment Method:</label>
+                                                                        <select class="form-select" name="paymentMethod" id="paymentMethod<?php echo $row['appointment_id']; ?>" onchange="togglePaymentDetails(<?php echo $row['appointment_id']; ?>)">
+                                                                            <option value="cash">Cash</option>
+                                                                            <option value="online" selected>Online Payment</option>
+                                                                        </select>
+
+                                                                        <div id="onlinePaymentDetails<?php echo $row['appointment_id']; ?>" style="display: block;">
+                                                                            <p class="mt-4"><strong>Bank Account Information:</strong> 123456789 (XYZ Bank)</p>
+                                                                            <img class="mb-4" src="../QR-code2.jpg" alt="QR Code" width="200" />
+                                                                            <label for="paymentProof">Upload Proof of Payment (PDF/JPG/JPEG/PNG):</label>
+                                                                            <input type="file" class="form-control" name="paymentProof" accept=".pdf,.jpg,.jpeg,.png" />
+                                                                        </div>
+
+                                                                        <div id="cashPaymentInfo<?php echo $row['appointment_id']; ?>" style="display: none;">
+                                                                            <p class="mt-4">Make payment at the counter on <?php echo $row['appointment_date']; ?> at <?php echo $row['start_time']; ?>.</p>
+                                                                            <p>Show your appointment ID to complete the payment.</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="submit" class="btn btn-primary">Confirm</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Modal for Feedback -->
+                                                <div id="feedbackModal<?php echo $row['appointment_id']; ?>" class="modal fade" tabindex="-1" aria-labelledby="feedbackModalLabel<?php echo $row['appointment_id']; ?>" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="feedbackModalLabel<?php echo $row['appointment_id']; ?>">Give Feedback for Appointment ID #<?php echo $row['appointment_id']; ?></h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                            </div>
+                                                            <form method="post" action="Api/give-feedback.php">
+                                                                <input type="hidden" name="appointment_id" value="<?php echo $row['appointment_id']; ?>">
+                                                                <div class="modal-body">
+                                                                    <label for="rating">Rate your experience:</label>
+                                                                    <select name="rating" id="rating" class="form-select">
+                                                                        <option value="1">☆</option>
+                                                                        <option value="2">☆☆</option>
+                                                                        <option value="3">☆☆☆</option>
+                                                                        <option value="4">☆☆☆☆</option>
+                                                                        <option value="5">☆☆☆☆☆</option>
+                                                                    </select>
+
+                                                                    <label for="comment" class="mt-3">Comments:</label>
+                                                                    <textarea name="comment" id="comment" class="form-control" rows="4" placeholder="Your feedback..."></textarea>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php endwhile; ?>
                                         </div>
-                                    </div>
-                                </form>
+                                    <?php else : ?>
+                                        <div class="alert alert-warning text-center">No appointments found.</div>
+                                    <?php endif; ?>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <!-- end page title -->
+                    <!-- End content -->
 
 
                 </div>
-                <!-- container-fluid -->
             </div>
             <!-- End Page-content -->
 
@@ -829,6 +981,21 @@
     </div>
 
     <?php include 'Component/javascript.php' ?>
+    <script>
+        function togglePaymentDetails(appointmentId) {
+            const paymentMethod = document.getElementById(`paymentMethod${appointmentId}`).value;
+            const onlinePaymentDetails = document.getElementById(`onlinePaymentDetails${appointmentId}`);
+            const cashPaymentInfo = document.getElementById(`cashPaymentInfo${appointmentId}`);
+
+            if (paymentMethod === "online") {
+                onlinePaymentDetails.style.display = "block";
+                cashPaymentInfo.style.display = "none";
+            } else {
+                onlinePaymentDetails.style.display = "none";
+                cashPaymentInfo.style.display = "block";
+            }
+        }
+    </script>
 </body>
 
 </html>
