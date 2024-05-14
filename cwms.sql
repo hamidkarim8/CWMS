@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 11, 2024 at 09:04 AM
+-- Generation Time: May 14, 2024 at 08:18 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -107,8 +107,8 @@ CREATE TABLE `employee` (
 --
 
 INSERT INTO `employee` (`id`, `name`, `email`, `position`, `branchID`, `isAvailable`) VALUES
-(1, 'ABU', 'test@gmail.com', 'Supervisor', 2, 1),
-(2, 'AHMAD', 'test2@gmail.com', 'Staff Assistant', 1, 1),
+(1, 'ABU', 'abu@gmail.com', 'Supervisor', 2, 1),
+(2, 'AHMAD', 'ahmad@gmail.com', 'Staff Assistant', 1, 1),
 (4, 'RASID', 'rasid@gmail.com', 'Polish Man', 1, 1);
 
 -- --------------------------------------------------------
@@ -160,14 +160,8 @@ CREATE TABLE `profile` (
 --
 
 INSERT INTO `profile` (`id`, `user_id`, `fullname`, `phone`, `email`) VALUES
-(2, 1, 'admin', '12344', 'test@gmail.com'),
-(8, 11, 'Customer1', '0139381521121', 'test1@gmail.com'),
-(9, 12, 'Customer2', '12381092830', 'email@testsaje.com'),
-(10, 13, 'testing full', NULL, ''),
-(11, 15, 'akauntest', '01298782834', ''),
-(12, 16, 'dsgr', '4', ''),
-(13, 17, 'razakthegoat', '01192983744', 'razak@gmail.com'),
-(99, 99, 'Walk-in Customer', '0', 'walkincustomer@gmail.com');
+(1, 1, 'admin', '0179869286', 'admin@gmail.com'),
+(2, 2, 'Walk-in Customer', '0', 'walkincustomer@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -188,14 +182,7 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `username`, `password`, `role`) VALUES
 (1, 'admin', 'admin', 'Admin'),
-(11, 'test1', 'cust1', 'Customer'),
-(12, 'test2', 'cust2', 'Customer'),
-(13, 'test', 'test', 'Customer'),
-(14, 'test', 'test', 'Customer'),
-(15, 'test3', 'test', 'Customer'),
-(16, 'gdrgdg', 'drg', 'Customer'),
-(17, 'Razak', 'razak123', 'Customer'),
-(99, 'walkinCustomer', 'customer', 'Customer');
+(2, 'walkinCustomer', 'customer', 'Customer');
 
 -- --------------------------------------------------------
 
@@ -367,7 +354,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `vehicle`
 --
 ALTER TABLE `vehicle`
-  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `washpackage`
